@@ -82,14 +82,14 @@ router.post('/signup', async (req, res) => {
     var transporter = nodemailer.createTransport({
       service: "hotmail",
       auth: {
-        user: "shreyas.shah@learner.manipal.edu",
-        pass: "shahlshreyas@19"
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS
       }
     });
 
     const options = {
-      from: 'shreyas.shah@learner.manipal.edu',
-      to: 'shreyaslshah@gmail.com',
+      from: process.env.MAIL_USER,
+      to: email,
       subject: 'email verification',
       text: `go to this link: `,
       html: `<a href='http://${req.headers.host}/verify-email?uid=${user._id}'>click to verify</a>`
@@ -170,14 +170,14 @@ router.post('/forgot-password', async (req, res) => {
   var transporter = nodemailer.createTransport({
     service: "hotmail",
     auth: {
-      user: "shreyas.shah@learner.manipal.edu",
-      pass: "shahlshreyas@19"
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS
     }
   });
 
   const options = {
-    from: 'shreyas.shah@learner.manipal.edu',
-    to: 'shreyaslshah@gmail.com',
+    from: process.env.MAIL_USER,
+    to: email,
     subject: 'password reset link',
     text: `go to this link: `,
     html: `<a href='http://${req.headers.host}/reset-password?uid=${user._id}'>click to reset password</a>`
