@@ -12,11 +12,11 @@ const questionSchema = new mongoose.Schema({
     validate: [validateDifficulty, 'invalid difficulty']
   },
 
-  //image links
   image_1: String,
   image_2: String,
   image_3: String,
   image_4: String,
+
   /*
   images: [{
     type: String
@@ -43,7 +43,7 @@ questionSchema.pre('save', async function (next) {
   }else{
     this.points == 300;
   }
-  
+
   next();
 });
 
