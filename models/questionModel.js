@@ -12,10 +12,10 @@ const questionSchema = new mongoose.Schema({
     validate: [validateDifficulty, 'invalid difficulty']
   },
 
-  image_1: String,
-  image_2: String,
-  image_3: String,
-  image_4: String,
+  image_1: {type: String},
+  image_2: {type: String},
+  image_3: {type: String},
+  image_4: {type: String},
 
   /*
   images: [{
@@ -27,7 +27,7 @@ const questionSchema = new mongoose.Schema({
     type: String, required: true
   }],
 
-  points: Number
+  points: {type: Number}
 
 });
 
