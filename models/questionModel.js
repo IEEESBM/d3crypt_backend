@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
 
+
+let questionNumber = 1;
+
 const questionSchema = new mongoose.Schema({
   question: {
     type: String, 
     required = true,
+  },
+
+  index:{
+    type: Number
   },
 
   difficulty: {
@@ -44,6 +51,9 @@ questionSchema.pre('save', async function (next) {
     this.points == 300;
   }
 
+  this.index = questionNumber;
+  questionNumber++;
+  
   next();
 });
 
