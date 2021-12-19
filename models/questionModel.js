@@ -47,7 +47,7 @@ questionSchema.pre('save', async function (next) {
 
   this.index = questionNumber;
   questionNumber++;
-  
+  console.log("New Index set");
   next();
 });
 
