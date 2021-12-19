@@ -24,12 +24,6 @@ const questionSchema = new mongoose.Schema({
   image_3: {type: String},
   image_4: {type: String},
 
-  /*
-  images: [{
-    type: String
-  }],
-  */
-
   answer: [{
     type: String, required: true
   }],
