@@ -5,17 +5,20 @@ answerArray = ['power of the sun',
                 'hello peter'                
 ];
 
-checkAnswer(answerArray);
 
-function checkAnswer(arrayOfAnswers) {
+let result = checkAnswer(userInput);
+
+console.log(result);
+
+
+function checkAnswer(input) {
     
-    arrayOfAnswers.forEach(element => {
-    if(compareInput(userInput, element)){
-        console.log('Right');
-    }else{
-        console.log('wrong!!')
+    for(let i=0; i<answerArray.length; i++){
+        if(compareInput(input, answerArray[i])){
+            return true;
+        }
     }
-    });
+    return false;
 }
 
 
