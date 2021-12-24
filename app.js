@@ -4,6 +4,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes')
 
+const handleAnswer = require ('./middleware/answerHandling');
+const handleScore = require ('./middleware/scoreHandling');
+
 const app = express();
 
 app.use(express.json());
@@ -18,3 +21,18 @@ mongoose.connect(process.env.MONGO_URI, {
 
 
 app.use(authRoutes);
+
+app.use(express.urlencoded({
+  extended: true
+}))
+
+app.get('/submit', async (req, res) => {
+  userInput = req.body.answer;
+
+  if (handleAnswer.checkAnswer(userInput)){
+    handleScore.scoreHandling();
+  }else {
+    console.log("WRONG ANSWER")
+  }
+
+})

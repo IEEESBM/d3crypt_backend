@@ -20,8 +20,18 @@ function addStreakBonus(responses) {
   return bonus;
 }
 
-console.log(incrementScore(20, true, 1));
-console.log(addStreakBonus(50, [1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1]));
+// console.log(incrementScore(20, true, 1));
+// console.log(addStreakBonus(50, [1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1]));
 
 // to be done
-function scoreHandling() {}
+function scoreHandling(currentScore, isCorrect, attemptNumber, responses) {
+  let score = incrementScore(currentScore, isCorrect, attemptNumber);
+  let currBonus = addStreakBonus(responses);
+
+  //update user db
+  
+}
+
+
+
+module.exports = {scoreHandling}

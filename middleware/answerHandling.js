@@ -1,7 +1,4 @@
-const { use } = require("bcrypt/promises");
-
 var userInput = 'the power of sun in the palm of my hand';
-
 answerArray = ['power of the sun',
                 'the power of sun in the palm of my hand',
                 'hello peter'                
@@ -24,6 +21,9 @@ async function compareInput(ans, correctAns) {
 }
 
 
-checkAnswer(userInput)
-.then(data => { console.log(data)} )
-.catch(error => { console.log (error)} )
+// checkAnswer(userInput)
+// .then(data => { console.log(data);} )
+// .catch(error => { console.log (error)} )
+
+
+module.exports = { checkAnswer }
