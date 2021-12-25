@@ -15,6 +15,8 @@ app.use(express.json())
 const questionRouter=require('./QRoutes/questions')
 app.use('/questions',questionRouter)
 
+const userRouter=require('./QRoutes/users')
+app.use('/users',userRouter)
 
 app.listen(9000, ()=>{
     console.log("Server started")
