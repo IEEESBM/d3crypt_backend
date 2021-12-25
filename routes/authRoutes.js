@@ -13,7 +13,7 @@ const router = Router();
 
 const handleErrors = (error) => {
 
-  let errorMessage = { username: '', email: '', password: '', phone : '', ID : '' };
+  let errorMessage = { username: '', email: '', password: '', phone: '', ID: '' };
 
   // wrong email/password during login error
   if (error.message === 'incorrect email') {
@@ -70,7 +70,7 @@ router.get('/signup', (req, res) => {
 /* *********************************************************** */
 
 router.post('/signup', async (req, res) => {
-  const { username, email, password , phone, college, ID, memNo} = req.body;
+  const { username, email, password, phone, college, ID, memNo } = req.body;
 
   try {
     const user = await User.create({
@@ -115,6 +115,8 @@ router.post('/signup', async (req, res) => {
 
   catch (error) {
     let errorMessage = handleErrors(error);
+    console.log(errorMessage);
+    // res.status(400).json({ errorMessage, 'err': error.toString() })
     res.status(400).json({ errorMessage });
   }
 
