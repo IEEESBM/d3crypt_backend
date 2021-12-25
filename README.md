@@ -1,7 +1,5 @@
-# d3crypt_backend
+#d3crypt backend
 
-2 schemas present, one for user, other one for questions. 
-
-2 routes one for question n one for user data http request. 
-
-2 app.js files, one inside middleware folder, other one as is visible in main branch itself.
+2 schemas added, user schema and question schema
+2 routes added, user route and question route
+1 app.js file with both the routes connected
