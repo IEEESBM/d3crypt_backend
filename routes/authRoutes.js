@@ -156,7 +156,7 @@ router.post('/login', async (req, res) => {
     const token = createToken(user._id);
     sessionstorage.setItem('jwt', token);
 
-    res.status(200).json({ user: user.username });
+    res.status(200).json({ username: user.username });
   }
   catch (error) {
     let errorMessage = handleErrors(error);
