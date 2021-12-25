@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     lowercase: true,
     unique: true,
-    required: [true, 'Please enter a Username']
+    required: [true, 'Please enter a username']
   },
 
   email: {
@@ -23,8 +23,25 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please enter a Password'],
     minlength: [4, 'Minimum Password length must be 4 characters']
   },
-
+  phone:{
+    type : Number,
+    unique:true,
+    required : [true, 'Please enter a phone number'],
+    min : [1000000000, 'Sorry that is not a valid phone number'],
+    max : [9999999999 ,'Sorry that is not a valid phone number']
+  },
+  college : {
+    type: String,
+    required : [true,'Please enter the name of your college'],
+  },
+  ID : {
+    type: Number,
+  },
+  memNo:{
+    type : Number,
+  },
   isVerified: Boolean,
+
 });
 
 

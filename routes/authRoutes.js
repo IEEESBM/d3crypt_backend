@@ -13,7 +13,7 @@ const router = Router();
 
 const handleErrors = (error) => {
 
-  let errorMessage = { username: '', email: '', password: '' };
+  let errorMessage = { username: '', email: '', password: '', phone : '', ID : '' };
 
   // wrong email/password during login error
   if (error.message === 'incorrect email') {
@@ -30,6 +30,9 @@ const handleErrors = (error) => {
     }
     if (error.keyValue.email) {
       errorMessage.email = 'That email is already registered';
+    }
+    if (error.keyValue.phone) {
+      errorMessage.email = 'This phone number is already registered';
     }
   }
 
@@ -67,13 +70,17 @@ router.get('/signup', (req, res) => {
 /* *********************************************************** */
 
 router.post('/signup', async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password , phone, college, ID, memNo} = req.body;
 
   try {
     const user = await User.create({
       username,
       email,
       password,
+      phone,
+      college,
+      ID,
+      memNo,
       isVerified: false
     });
     const token = createToken(user._id);
