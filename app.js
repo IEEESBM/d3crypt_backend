@@ -8,13 +8,19 @@ const app = express();
 
 app.use(express.json());
 
-// connect to database then setup express app
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(app.listen(3000))
-  .catch((err) => console.log(err));
+const URL = 'mongodb+srv://shreyaslshah:shreyasshah@cluster0.ehzs0.mongodb.net/integration?retryWrites=true&w=majority';
+
+try {
+  mongoose.connect(URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+    .then(app.listen(4000));
+  console.log("Connected to DB !!");
+} catch (e) {
+  console.log(e);
+  throw e;
+}
 
 
 app.use(authRoutes);
