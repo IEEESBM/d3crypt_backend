@@ -1,6 +1,6 @@
 const express=require('express')
 const router=express.Router()
-const Question=require('../Questions_Schema/question_schema.js')
+const Question=require('../models/question_schema.js')
 
 router.get('/',async(req,res)=>{
     try{
