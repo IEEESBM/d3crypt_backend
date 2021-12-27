@@ -12,10 +12,10 @@ con.on('open',()=>{
 
 app.use(express.json())
 
-const questionRouter=require('./QRoutes/questions')
+const questionRouter=require('./routes/questions')
 app.use('/questions',questionRouter)
 
-const userRouter=require('./QRoutes/users')
+const userRouter=require('./routes/users')
 app.use('/users',userRouter)
 
 app.listen(9000, ()=>{
