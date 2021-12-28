@@ -29,6 +29,8 @@ function scoreHandling(currentScore, isCorrect, attemptNumber, responses) {
   let currBonus = addStreakBonus(responses);
 
   //update user db
+  console.log('score is ' + score);
+  console.log('bonus is ' + currBonus);
   
 }
 
