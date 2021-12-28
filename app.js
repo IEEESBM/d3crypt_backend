@@ -27,8 +27,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/submit', async (req, res) => {
     userInput = req.body.answer;
-    console.log(req.body.answer + ' is the correct answer');
-    if (await handleAnswer.checkAnswer(userInput)){
+    
+    if (await handleAnswer.checkAnswer(userInput).catch(err => console.log(err))){
+      console.log(req.body.answer + ' is the correct answer');
       handleScore.scoreHandling(20, true, 1, [1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1]);
     }else {
       console.log("WRONG ANSWER")
