@@ -111,7 +111,7 @@ router.post('/signup', async (req, res) => {
       console.log('verification email sent');
     })
 
-    res.status(201).json(user);
+    res.status(201).json({user, token});
   }
 
   catch (error) {
