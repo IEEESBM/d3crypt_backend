@@ -56,14 +56,10 @@ userSchema.pre("save", async function (next) {
     set[i] = 0;
   }
 
-  let randomIndex = 0;
   let easy = 5, med = 5, hard = 3;
-  let randomqs = [];
+  let randomqs = new Array(15).fill(-1);
   let curr = 0;
-
-  generate_med(5, 0, randomqs, set, totalQuestions);
-  generate_easy(5, 0, randomqs, set, totalQuestions);
-  generate_hard(5, 0, randomqs, set, totalQuestions);
+  await generate(randomqs, set, totalQuestions);
 
   console.log(randomqs);
   this.questions = randomqs;
@@ -71,57 +67,82 @@ userSchema.pre("save", async function (next) {
 
 });
 
-async function generate_easy(easy, curr, randomqs, set, totalQuestions) {
+async function generate(randomqs, set, totalQuestions){
+  const easyidx = 0;
+  const medidx = 5;
+  const hardidx = 10;
+  await generate_easy(5, 0,easyidx, randomqs, set, totalQuestions);
+  await generate_med(5, 0,medidx, randomqs, set, totalQuestions);
+  await generate_hard(5, 0,hardidx, randomqs, set, totalQuestions);
+
+}
+
+
+async function generate_easy(easy, curr,idx1, randomqs, set, totalQuestions) {
   if (easy == curr) return;
-  randomIndex = Math.floor(Math.random() * (totalQuestions + 1));
-  let q = await Question.findOne({ index: randomIndex }, function (err, doc) {
-    try {
-      if (set[randomIndex] != 1 && doc.difficulty == 1) {
-        set[randomIndex] = 1;
-        randomqs.push(randomIndex);
-        curr++;
-      }
-    } catch (err) {
-      console.log(err);
-    }
-    generate_easy(easy, curr, randomqs, set, totalQuestions);
-  }).clone();
+  randomIndex1 = Math.floor(Math.random() * (9));
+
+  try{
+    let doc = await Question.findOne({ index: randomIndex1 });
+    
+      if (doc!=null && set[randomIndex1] != 1 && doc.difficulty == 1) {
+          set[randomIndex1] = 1;
+          // console.log('easy idx:',idx1);
+          randomqs[idx1++] = randomIndex1;
+          curr++;
+        }
+      
+      await generate_easy(easy, curr,idx1, randomqs, set, totalQuestions);
+  }
+  catch(error){
+    console.log(error);
+  }
+
   console.log(randomqs);
 }
 
-async function generate_med(med, curr, randomqs, set, totalQuestions) {
+
+async function generate_med(med, curr,idx2, randomqs, set, totalQuestions) {
   if (med == curr) return;
-  randomIndex = Math.floor(Math.random() * (totalQuestions + 1));
-  let q = await Question.findOne({ index: randomIndex }, function (err, doc) {
-    try {
-      if (set[randomIndex] != 1 && doc.difficulty == 2) {
-        set[randomIndex] = 1;
-        randomqs.push(randomIndex);
-        curr++;
-      }
-    } catch (err) {
-      console.log(err);
-    }
-    generate_med(med, curr, randomqs, set, totalQuestions);
-  }).clone();
+  // randomIndex = Math.floor(Math.random() * (totalQuestions + 1));
+  randomIndex2 = 9+Math.floor(Math.random() * (7));
+  try{
+    let doc = await Question.findOne({ index: randomIndex2 });
+      
+        if (doc!=null && set[randomIndex2] != 1 && doc.difficulty == 2) {
+          set[randomIndex2] = 1;
+          // console.log('med idx:',idx2);
+          randomqs[idx2++] = randomIndex2;
+          curr++;
+        }
+      
+      await generate_med(med, curr,idx2, randomqs, set, totalQuestions);
+  }
+  catch(error){
+    console.log(error);
+  }
+
   console.log(randomqs);
 }
 
-async function generate_hard(hard, curr, randomqs, set, totalQuestions) {
+
+async function generate_hard(hard, curr,idx3, randomqs, set, totalQuestions) {
   if (hard == curr) return;
-  randomIndex = Math.floor(Math.random() * (totalQuestions + 1));
-  let q = await Question.findOne({ index: randomIndex }, function (err, doc) {
-    try {
-      if (set[randomIndex] != 1 && doc.difficulty == 3) {
-        set[randomIndex] = 1;
-        randomqs.push(randomIndex);
-        curr++;
-      }
-    } catch (err) {
-      console.log(err);
-    }
-    generate_hard(hard, curr, randomqs, set, totalQuestions);
-  }).clone();
+  randomIndex3 = 16+Math.floor(Math.random() * (5));
+  try{
+    let doc = await Question.findOne({ index: randomIndex3 });
+      
+        if (doc!=null && set[randomIndex3] != 1 && doc.difficulty == 3) {
+          set[randomIndex3] = 1;
+          randomqs[idx3++] = randomIndex3;
+          curr++;
+        }
+      
+      await generate_hard(hard, curr,idx3, randomqs, set, totalQuestions);
+  }
+  catch(error){
+    console.log(error);
+  }
   console.log(randomqs);
 }
 

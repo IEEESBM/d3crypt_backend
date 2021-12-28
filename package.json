@@ -19,5 +19,8 @@
     "nodemailer": "^6.6.3",
     "sessionstorage": "^0.1.0",
     "validator": "^13.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
