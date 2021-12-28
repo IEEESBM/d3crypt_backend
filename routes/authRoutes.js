@@ -5,6 +5,7 @@ const sessionstorage = require('sessionstorage');
 const nodemailer = require("nodemailer");
 const bcrypt = require('bcrypt');
 const { checkIsVerified, checkJWT } = require('../middleware/authMiddleware');
+const res = require('express/lib/response');
 
 const router = Router();
 
@@ -89,14 +90,14 @@ router.post('/signup', async (req, res) => {
     var transporter = nodemailer.createTransport({
       service: "hotmail",
       auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS
+        user: 'shreyas.shah@learner.manipal.edu',
+        pass: "shahlshreyas@19"
       }
     });
 
     const options = {
-      from: process.env.MAIL_USER,
-      to: email,
+      from: "shreyas.shah@learner.manipal.edu",
+      to: "shreyaslshah@gmail.com",
       subject: 'email verification',
       text: `go to this link: `,
       html: `<a href='http://${req.headers.host}/verify-email?uid=${user._id}'>click to verify</a>`
@@ -224,6 +225,19 @@ router.post('/reset-password', async (req, res) => {
 
   res.status(201).send('password has been reset');
 
+})
+
+router.post('/get-user', async(req, res)=>{
+  
+  var {uid} = req.body;
+
+  try {
+    console.log(uid);
+    const user = await User.findOne({ _id: uid });
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 module.exports = router;

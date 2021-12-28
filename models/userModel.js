@@ -27,8 +27,8 @@ const userSchema = new mongoose.Schema({
     type : Number,
     unique:true,
     required : [true, 'Please enter a phone number'],
-    min : [1000000000, 'Sorry that is not a valid phone number'],
-    max : [9999999999 ,'Sorry that is not a valid phone number']
+    // min : [1000000000, 'Sorry that is not a valid phone number'],
+    // max : [9999999999 ,'Sorry that is not a valid phone number']
   },
   college : {
     type: String,
