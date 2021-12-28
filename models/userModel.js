@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const { isEmail } = require("validator");
 const bcrypt = require("bcrypt");
 
+const Question = require('../models/questionModel');
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -44,14 +46,11 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
 
-/// Saving Question Set
-userSchema.pre("save", async function (next) {
+  //Random Set alloc
   console.log("saving a new set to db");
 
-  let totalQuestions = 30;
+  let totalQuestions = 20;
   let set = [];
   for (var i = 0; i < totalQuestions; i++) {
     set[i] = 0;
@@ -61,44 +60,70 @@ userSchema.pre("save", async function (next) {
   let easy = 5, med = 5, hard = 3;
   let randomqs = [];
   let curr = 0;
-  while (curr != easy) {
-    randomIndex = Math.floor(Math.random() * 31);
-    await Question.findOne({ index: randomIndex }, function (err, doc) {
-      if (set[randomIndex] != 1 && this.difficulty == 1) {
-        set[randomIndex] = 1;
-        randomqs.push(randomIndex);
-        curr++;
-      }
-    });
-  }
 
-  curr = 0;
-  while (curr != med) {
-    randomIndex = Math.floor(Math.random() * 31);
-    await Question.findOne({ index: randomIndex }, function (err, doc) {
-      if (set[randomIndex] != 1 && this.difficulty == 2) {
-        set[randomIndex] = 1;
-        randomqs.push(randomIndex);
-        curr++;
-      }
-    });
-  }
+  generate_med(5, 0, randomqs, set, totalQuestions);
+  generate_easy(5, 0, randomqs, set, totalQuestions);
+  generate_hard(5, 0, randomqs, set, totalQuestions);
 
-  curr = 0;
-  while (curr != hard) {
-    randomIndex = Math.floor(Math.random() * 31);
-    await Question.findOne({ index: randomIndex }, function (err, doc) {
-      if (set[randomIndex] != 1 && this.difficulty == 3) {
-        set[randomIndex] = 1;
-        randomqs.push(randomIndex);
-        curr++;
-      }
-    });
-  }
-
-  this.question = randomqs;
+  console.log(randomqs);
+  this.questions = randomqs;
   next();
+
 });
+
+async function generate_easy(easy, curr, randomqs, set, totalQuestions) {
+  if (easy == curr) return;
+  randomIndex = Math.floor(Math.random() * (totalQuestions + 1));
+  let q = await Question.findOne({ index: randomIndex }, function (err, doc) {
+    try {
+      if (set[randomIndex] != 1 && doc.difficulty == 1) {
+        set[randomIndex] = 1;
+        randomqs.push(randomIndex);
+        curr++;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    generate_easy(easy, curr, randomqs, set, totalQuestions);
+  }).clone();
+  console.log(randomqs);
+}
+
+async function generate_med(med, curr, randomqs, set, totalQuestions) {
+  if (med == curr) return;
+  randomIndex = Math.floor(Math.random() * (totalQuestions + 1));
+  let q = await Question.findOne({ index: randomIndex }, function (err, doc) {
+    try {
+      if (set[randomIndex] != 1 && doc.difficulty == 2) {
+        set[randomIndex] = 1;
+        randomqs.push(randomIndex);
+        curr++;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    generate_med(med, curr, randomqs, set, totalQuestions);
+  }).clone();
+  console.log(randomqs);
+}
+
+async function generate_hard(hard, curr, randomqs, set, totalQuestions) {
+  if (hard == curr) return;
+  randomIndex = Math.floor(Math.random() * (totalQuestions + 1));
+  let q = await Question.findOne({ index: randomIndex }, function (err, doc) {
+    try {
+      if (set[randomIndex] != 1 && doc.difficulty == 3) {
+        set[randomIndex] = 1;
+        randomqs.push(randomIndex);
+        curr++;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    generate_hard(hard, curr, randomqs, set, totalQuestions);
+  }).clone();
+  console.log(randomqs);
+}
 
 const User = mongoose.model("users", userSchema);
 
