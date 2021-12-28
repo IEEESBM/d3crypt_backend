@@ -33,7 +33,7 @@ app.post('/submit', async (req, res) => {
     }else {
       console.log("WRONG ANSWER")
     }
-    
+    res.send('Recieved your data successfully!');
   })
 
 
