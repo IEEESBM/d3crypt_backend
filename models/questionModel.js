@@ -1,16 +1,17 @@
 const mongoose = require('mongoose');
 
-
 let questionNumber = 1;
 
 const questionSchema = new mongoose.Schema({
-  question: {
+  title: {
     type: String, 
-    required = true,
+    required : true,
   },
 
   index:{
-    type: Number
+    type: Number,
+    required: true,
+    unique : true
   },
 
   difficulty: {
@@ -19,10 +20,13 @@ const questionSchema = new mongoose.Schema({
     validate: [validateDifficulty, 'invalid difficulty']
   },
 
-  image_1: {type: String},
-  image_2: {type: String},
+  image_1: {type: String, required: true},
+  image_2: {type: String, required: true},
   image_3: {type: String},
   image_4: {type: String},
+
+  hint_1: {type: String, required: true},
+  hint_2: {type: String},
 
   answer: [{
     type: String, required: true
@@ -45,9 +49,9 @@ questionSchema.pre('save', async function (next) {
     this.points == 300;
   }
 
-  this.index = questionNumber;
-  questionNumber++;
-  console.log("New Index set");
+  // this.index = questionNumber;
+  // questionNumber++;
+  // console.log("New Index set");
   next();
 });
 
