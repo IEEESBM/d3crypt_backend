@@ -9,13 +9,20 @@ router.get('/check', (req, res) => {
     res.send('OK');
 })
 
-router.get('/resume', (req, res) => {
-    let user = User.findById(req.body._id);
-    let current = user.currentIndex;
-    res.send(current);
+router.get('/', async (req, res) => {
+  try{
+    let u = await User.findById(req.body.id);
+    let current = u.currentQuestion;
+    console.log(u.currentQuestion);
+    let cq = await Question.findOne({index: u.questions[current]});
+    console.log(cq);
+    res.send(cq);
+  }catch(err){
+      console.log(err);
+  }
 });
 
-router.get('/', async (req, res) => {
+router.get('/show_all', async (req, res) => {
     try {
         const questions = await Question.find();
         res.json(questions)

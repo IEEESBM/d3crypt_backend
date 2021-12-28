@@ -79,29 +79,29 @@ router.post('/signup', async (req, res) => {
     const token = createToken(user._id);
     sessionstorage.setItem('jwt', token);
 
-    // var transporter = nodemailer.createTransport({
-    //   service: "hotmail",
-    //   auth: {
-    //     user: process.env.MAIL_USER,
-    //     pass: process.env.MAIL_PASS
-    //   }
-    // });
+    var transporter = nodemailer.createTransport({
+      service: "hotmail",
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS
+      }
+    });
 
-    // const options = {
-    //   from: process.env.MAIL_USER,
-    //   to: email,
-    //   subject: 'email verification',
-    //   text: `go to this link: `,
-    //   html: `<a href='http://${req.headers.host}/verify-email?uid=${user._id}'>click to verify</a>`
-    // }
+    const options = {
+      from: process.env.MAIL_USER,
+      to: email,
+      subject: 'email verification',
+      text: `go to this link: `,
+      html: `<a href='http://${req.headers.host}/verify-email?uid=${user._id}'>click to verify</a>`
+    }
 
-    // transporter.sendMail(options, function (err, info) {
-    //   if (err) {
-    //     console.log(err);
-    //     return;
-    //   }
-    //   console.log('verification email sent');
-    // })
+    transporter.sendMail(options, function (err, info) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log('verification email sent');
+    })
 
     res.status(201).json(user);
   }
