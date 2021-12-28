@@ -60,6 +60,8 @@ userSchema.pre("save", async function (next) {
 
   console.log(randomqs);
   this.questions = randomqs;
+  this.currentQuestion = 0;
+  this.points = 0;
   next();
 
 });
