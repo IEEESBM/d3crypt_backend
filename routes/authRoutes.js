@@ -33,7 +33,7 @@ const handleErrors = (error) => {
       errorMessage.email = 'That email is already registered';
     }
     if (error.keyValue.phone) {
-      errorMessage.email = 'This phone number is already registered';
+      errorMessage.phone = 'This phone number is already registered';
     }
   }
 
@@ -111,7 +111,7 @@ router.post('/signup', async (req, res) => {
       console.log('verification email sent');
     })
 
-    res.status(201).json({user, token});
+    res.status(201).json(user);
   }
 
   catch (error) {
