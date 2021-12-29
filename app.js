@@ -18,3 +18,29 @@ mongoose.connect(process.env.MONGO_URI, {
 
 
 app.use(authRoutes);
+const router = Router();
+
+//get all users
+User.get("/AllUsers", checkAuth, (req, res, next) => {
+  return res.status(200).json(req.userData);
+});
+
+//get single user
+app.get("/User/:id", (request, response) => {
+  const UserId = Number(request.params.id);
+  const getuser = User.find((User) => User.id === UserId);
+
+  if (!getuser) {
+    response.status(500).send("Account not found.");
+  } else {
+    response.json(getuser);
+  }
+});
+
+//edit user
+router.put("/edit/:userId", checkAuth, function (req, res, next) {
+  if (req.userData.role === "superadmin") {
+    const id = req.params.userId;
+    User.findOneAndUpdate({ _id: id }, { $set: req.body });
+  }
+});
