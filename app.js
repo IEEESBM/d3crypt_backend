@@ -20,6 +20,15 @@ app.use(express.json());
 //   .then(app.listen(3000))
 //   .catch((err) => console.log(err));
 
+mongoose.connect("mongodb+srv://admin:admin123@cluster0.ltics.mongodb.net/?retryWrites=true&w=majority", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(app.listen(3000))
+  .then(console.log("Connected to DB"))
+  .catch((err) => console.log(err));
+  
+
 
 app.use(authRoutes);
 
