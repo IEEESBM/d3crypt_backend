@@ -238,6 +238,27 @@ router.post('/get-user', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+router.delete("/:id",async(req,res)=>{
+  try{
+    const user = await User.findByIdAndDelete(req.params.id);
+    console.log(user);
+    return res.json(user);
+  }
+  catch(err){
+    console.log(err);
+  }
+})
+
+router.get("/user",async(req,res)=>{
+  try{
+    const user = await User.findOne({username:req.body.username});
+    res.json(user);
+  }
+  catch(err){
+    console.log(err);
+  }
 })
 
 module.exports = router;
