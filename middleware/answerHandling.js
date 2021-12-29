@@ -1,4 +1,4 @@
-var userInput = 'the power of sun in the palm of my hand';
+// var userInput = 'the power of sun in the palm of my hand';
 answerArray = ['power of the sun',
                 'the power of sun in the palm of my hand',
                 'hello peter'                

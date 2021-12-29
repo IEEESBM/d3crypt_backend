@@ -24,6 +24,14 @@ const userSchema = new mongoose.Schema({
     minlength: [4, 'Minimum Password length must be 4 characters']
   },
 
+  noofattemps: {
+    type: Number
+  },
+
+  responses: {
+    type: Array
+  },
+
   isVerified: Boolean,
 });
 
