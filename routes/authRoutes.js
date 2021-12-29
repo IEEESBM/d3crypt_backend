@@ -5,6 +5,7 @@ const sessionstorage = require('sessionstorage');
 const nodemailer = require("nodemailer");
 const bcrypt = require('bcrypt');
 const { checkIsVerified, checkJWT } = require('../middleware/authMiddleware');
+const res = require('express/lib/response');
 
 const router = Router();
 
@@ -32,7 +33,7 @@ const handleErrors = (error) => {
       errorMessage.email = 'That email is already registered';
     }
     if (error.keyValue.phone) {
-      errorMessage.email = 'This phone number is already registered';
+      errorMessage.phone = 'This phone number is already registered';
     }
   }
 
@@ -89,14 +90,14 @@ router.post('/signup', async (req, res) => {
     var transporter = nodemailer.createTransport({
       service: "hotmail",
       auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS
+        user: 'shreyas.shah@learner.manipal.edu',
+        pass: "shahlshreyas@19"
       }
     });
 
     const options = {
-      from: process.env.MAIL_USER,
-      to: email,
+      from: "shreyas.shah@learner.manipal.edu",
+      to: "shreyaslshah@gmail.com",
       subject: 'email verification',
       text: `go to this link: `,
       html: `<a href='http://${req.headers.host}/verify-email?uid=${user._id}'>click to verify</a>`
@@ -157,7 +158,7 @@ router.post('/login', async (req, res) => {
     const token = createToken(user._id);
     sessionstorage.setItem('jwt', token);
 
-    res.status(200).json({ user: user.username });
+    res.status(200).json(user);
   }
   catch (error) {
 
@@ -228,6 +229,40 @@ router.post('/reset-password', async (req, res) => {
 
   res.status(201).send('password has been reset');
 
+})
+
+router.post('/get-user', async (req, res) => {
+
+  var { uid } = req.body;
+
+  try {
+    console.log(uid);
+    const user = await User.findOne({ _id: uid });
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.delete("/:id",async(req,res)=>{
+  try{
+    const user = await User.findByIdAndDelete(req.params.id);
+    console.log(user);
+    return res.json(user);
+  }
+  catch(err){
+    console.log(err);
+  }
+})
+
+router.get("/user",async(req,res)=>{
+  try{
+    const user = await User.findOne({username:req.body.username});
+    res.json(user);
+  }
+  catch(err){
+    console.log(err);
+  }
 })
 
 module.exports = router;
