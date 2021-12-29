@@ -14,13 +14,13 @@ const router = Router();
 const handleErrors = (error) => {
 
   let errorMessage = { username: '', email: '', password: '', phone: '', ID: '' };
-
+  console.log(error.message)
   // wrong email/password during login error
   if (error.message === 'incorrect email') {
-    errorMessage.email = 'that email is not registered';
+    errorMessage.email = 'Invalid Email Id';
   }
   if (error.message === 'incorrect password') {
-    errorMessage.password = 'password is incorrect';
+    errorMessage.password = 'Password is Incorrect';
   }
 
   // username/email not available during signup error
@@ -114,6 +114,7 @@ router.post('/signup', async (req, res) => {
   }
 
   catch (error) {
+    console.log(error)
     let errorMessage = handleErrors(error);
     console.log(errorMessage);
     // res.status(400).json({ errorMessage, 'err': error.toString() })
@@ -159,8 +160,11 @@ router.post('/login', async (req, res) => {
     res.status(200).json({ user: user.username });
   }
   catch (error) {
+
     let errorMessage = handleErrors(error);
-    res.status(400).json({ errorMessage });
+    console.log('err:',errorMessage);
+    
+    res.status(400).json(errorMessage);
   }
 })
 
