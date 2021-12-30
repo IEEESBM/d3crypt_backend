@@ -45,7 +45,7 @@ mongoose.connect("mongodb+srv://admin:admin123@cluster0.ltics.mongodb.net/?retry
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-  .then(app.listen(3000))
+  .then(app.listen(4000))
   .then(console.log("Connected to DB"))
   .catch((err) => console.log(err));
 

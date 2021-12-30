@@ -161,7 +161,7 @@ router.post('/login', async (req, res) => {
     res.status(200).json(user);
   }
   catch (error) {
-
+    console.log(error);
     let errorMessage = handleErrors(error);
     console.log('err:',errorMessage);
     

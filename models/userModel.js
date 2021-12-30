@@ -85,14 +85,19 @@ userSchema.pre("save", async function (next) {
 userSchema.statics.login = async function (email, password) {
   const user = await this.findOne({ email: email });
   if (user) {
-    console.log(user)
     const auth = await bcrypt.compare(password, user.password);
     if (auth) {
       return user;
-
+    }
+    else {
+      throw Error('incorrect password');
     }
   }
+  else {
+    throw Error('incorrect email');
+  }
 }
+
 async function generate(randomqs, set, totalQuestions) {
   const easyidx = 0;
   const medidx = 5;
@@ -173,7 +178,7 @@ async function generate_hard(hard, curr, idx3, randomqs, set, totalQuestions) {
   }
   // console.log(randomqs);
 }
-    
+
 const User = mongoose.model("users", userSchema);
 
 module.exports = User;
