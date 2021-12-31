@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema({
   ID: {
     type: Number,
   },
+  mem:{
+    type: Boolean,
+    required:[true,'Please choose one option'],
+  },
   memNo: {
     type: Number,
   },

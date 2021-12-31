@@ -13,8 +13,9 @@ const router = Router();
 /* *********************************************************** */
 
 const handleErrors = (error) => {
+  console.log(error);
 
-  let errorMessage = { username: '', email: '', password: '', phone: '', ID: '' };
+  let errorMessage = { username: '', email: '', password: '', phone: '', ID: '', mem:''};
   console.log(error.message)
   // wrong email/password during login error
   if (error.message === 'incorrect email') {
@@ -34,6 +35,9 @@ const handleErrors = (error) => {
     }
     if (error.keyValue.phone) {
       errorMessage.phone = 'This phone number is already registered';
+    }
+    if(error.keyValue.mem){
+      errorMessage.mem = 'Please choose one option';
     }
   }
 
@@ -71,7 +75,7 @@ router.get('/signup', (req, res) => {
 /* *********************************************************** */
 
 router.post('/signup', async (req, res) => {
-  const { username, email, password, phone, college, ID, memNo } = req.body;
+  const { username, email, password, phone, college, ID,mem, memNo } = req.body;
 
   try {
     const user = await User.create({
@@ -81,6 +85,7 @@ router.post('/signup', async (req, res) => {
       phone,
       college,
       ID,
+      mem,
       memNo,
       isVerified: false
     });
@@ -97,7 +102,7 @@ router.post('/signup', async (req, res) => {
 
     const options = {
       from: "shreyas.shah@learner.manipal.edu",
-      to: "shreyaslshah@gmail.com",
+      to: "arshiaputhran08@gmail.com",
       subject: 'email verification',
       text: `go to this link: `,
       html: `<a href='http://${req.headers.host}/verify-email?uid=${user._id}'>click to verify</a>`
