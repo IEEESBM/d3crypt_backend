@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema({
   ID: {
     type: Number,
   },
+  mem:{
+    type: Boolean,
+    required:[true,'Please choose one option'],
+  },
   memNo: {
     type: Number,
   },
@@ -81,6 +85,22 @@ userSchema.pre("save", async function (next) {
   next();
 
 });
+
+userSchema.statics.login = async function (email, password) {
+  const user = await this.findOne({ email: email });
+  if (user) {
+    const auth = await bcrypt.compare(password, user.password);
+    if (auth) {
+      return user;
+    }
+    else {
+      throw Error('incorrect password');
+    }
+  }
+  else {
+    throw Error('incorrect email');
+  }
+}
 
 async function generate(randomqs, set, totalQuestions) {
   const easyidx = 0;

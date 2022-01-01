@@ -13,15 +13,16 @@ const router = Router();
 /* *********************************************************** */
 
 const handleErrors = (error) => {
+  console.log(error);
 
-  let errorMessage = { username: '', email: '', password: '', phone: '', ID: '' };
-
+  let errorMessage = { username: '', email: '', password: '', phone: '', ID: '', mem: '' };
+  console.log(error.message)
   // wrong email/password during login error
   if (error.message === 'incorrect email') {
-    errorMessage.email = 'that email is not registered';
+    errorMessage.email = 'Invalid Email Id';
   }
   if (error.message === 'incorrect password') {
-    errorMessage.password = 'password is incorrect';
+    errorMessage.password = 'Password is Incorrect';
   }
 
   // username/email not available during signup error
@@ -34,6 +35,9 @@ const handleErrors = (error) => {
     }
     if (error.keyValue.phone) {
       errorMessage.phone = 'This phone number is already registered';
+    }
+    if (error.keyValue.mem) {
+      errorMessage.mem = 'Please choose one option';
     }
   }
 
@@ -71,7 +75,7 @@ router.get('/signup', (req, res) => {
 /* *********************************************************** */
 
 router.post('/signup', async (req, res) => {
-  const { username, email, password, phone, college, ID, memNo } = req.body;
+  const { username, email, password, phone, college, ID, mem, memNo } = req.body;
 
   try {
     const user = await User.create({
@@ -81,6 +85,7 @@ router.post('/signup', async (req, res) => {
       phone,
       college,
       ID,
+      mem,
       memNo,
       isVerified: false
     });
@@ -111,10 +116,12 @@ router.post('/signup', async (req, res) => {
       console.log('verification email sent');
     })
 
-    res.status(201).json(user);
+    // res.status(201).json(user);
+    res.status(201).json(token);
   }
 
   catch (error) {
+    console.log(error)
     let errorMessage = handleErrors(error);
     console.log(errorMessage);
     // res.status(400).json({ errorMessage, 'err': error.toString() })
@@ -157,11 +164,14 @@ router.post('/login', async (req, res) => {
     const token = createToken(user._id);
     sessionstorage.setItem('jwt', token);
 
-    res.status(200).json(user);
+    res.status(200).json(token);
   }
   catch (error) {
+    console.log(error);
     let errorMessage = handleErrors(error);
-    res.status(400).json({ errorMessage });
+    console.log('err:', errorMessage);
+
+    res.status(400).json(errorMessage);
   }
 })
 
@@ -240,23 +250,23 @@ router.post('/get-user', async (req, res) => {
   }
 });
 
-router.delete("/:id",async(req,res)=>{
-  try{
+router.delete("/:id", async (req, res) => {
+  try {
     const user = await User.findByIdAndDelete(req.params.id);
     console.log(user);
     return res.json(user);
   }
-  catch(err){
+  catch (err) {
     console.log(err);
   }
 })
 
-router.get("/user",async(req,res)=>{
-  try{
-    const user = await User.findOne({username:req.body.username});
+router.get("/user", async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.body.username });
     res.json(user);
   }
-  catch(err){
+  catch (err) {
     console.log(err);
   }
 })
