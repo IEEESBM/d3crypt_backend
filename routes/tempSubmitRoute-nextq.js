@@ -48,6 +48,7 @@ router.post('/submit', async (req, res) => {
       res.send('Recieved your data successfully!');
 
       //redirects to the next/curr question;
+      //will change the route name if necessary
       res.redirect('/');
     })
   
