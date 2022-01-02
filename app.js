@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
 const questionRoutes = require('./routes/questionRoutes');
+const imageRoute = require('./routes/imageRoute');
 
 const app = express();
 
@@ -52,3 +53,4 @@ mongoose.connect("mongodb+srv://admin:admin123@cluster0.ltics.mongodb.net/?retry
 
 app.use(authRoutes);
 app.use('/questions', questionRoutes);
+app.use(imageRoute);
