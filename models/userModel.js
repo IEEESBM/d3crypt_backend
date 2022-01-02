@@ -47,7 +47,10 @@ const userSchema = new mongoose.Schema({
     type: Number,
   },
   isVerified: Boolean,
-
+  imgKey:{
+    type:String,
+    default:""
+  },
   questions: [
     {
       type: Number,
