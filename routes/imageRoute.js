@@ -27,8 +27,7 @@ let doc = await User.findOneAndUpdate({_id:req.body.id}, { imgKey: req.body.key 
   new: true
 });
 console.log(doc)
-
-
+});
 
 router.get("/image/:key", async (req, res) => {
   console.log("Getting img")
