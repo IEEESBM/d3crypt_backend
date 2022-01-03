@@ -18,16 +18,17 @@ router.post("/image", upload.single("image"), async (req, res) => {
   const result = await uploadFile(file);
   await unlinkFile(file.path);
   console.log(result);
-  res.send({ imagePath: `/image/${result.Key}` });
+  res.json(result.Key);
 });
 
 router.post("/user-img", async (req, res) => {
   console.log(req.body)
-let doc = await User.findOneAndUpdate({_id:req.body.id}, { imgKey: req.body.key }, {
-  new: true
+  let doc = await User.findOneAndUpdate({ _id: req.body.id }, { imgKey: req.body.key }, {
+    new: true
+  });
+  console.log(doc)
+  res.send('user schema updated with image key');
 });
-console.log(doc)
-
 
 
 router.get("/image/:key", async (req, res) => {

@@ -39,17 +39,17 @@ const userSchema = new mongoose.Schema({
   ID: {
     type: Number,
   },
-  mem:{
+  mem: {
     type: Boolean,
-    required:[true,'Please choose one option'],
+    required: [true, 'Please choose one option'],
   },
   memNo: {
     type: Number,
   },
   isVerified: Boolean,
-  imgKey:{
-    type:String,
-    default:""
+  imgKey: {
+    type: String,
+    default: ""
   },
   questions: [
     {
