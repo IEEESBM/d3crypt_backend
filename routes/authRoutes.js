@@ -5,6 +5,7 @@ const sessionstorage = require('sessionstorage');
 const nodemailer = require("nodemailer");
 const bcrypt = require('bcrypt');
 const { checkIsVerified, checkJWT } = require('../middleware/authMiddleware');
+const res = require('express/lib/response');
 
 const router = Router();
 
@@ -12,15 +13,16 @@ const router = Router();
 /* *********************************************************** */
 
 const handleErrors = (error) => {
+  console.log(error);
 
-  let errorMessage = { username: '', email: '', password: '' };
-
+  let errorMessage = { username: '', email: '', password: '', phone: '', ID: '', mem: '' };
+  console.log(error.message)
   // wrong email/password during login error
   if (error.message === 'incorrect email') {
-    errorMessage.email = 'that email is not registered';
+    errorMessage.email = 'Invalid Email Id';
   }
   if (error.message === 'incorrect password') {
-    errorMessage.password = 'password is incorrect';
+    errorMessage.password = 'Password is Incorrect';
   }
 
   // username/email not available during signup error
@@ -30,6 +32,12 @@ const handleErrors = (error) => {
     }
     if (error.keyValue.email) {
       errorMessage.email = 'That email is already registered';
+    }
+    if (error.keyValue.phone) {
+      errorMessage.phone = 'This phone number is already registered';
+    }
+    if (error.keyValue.mem) {
+      errorMessage.mem = 'Please choose one option';
     }
   }
 
@@ -67,13 +75,18 @@ router.get('/signup', (req, res) => {
 /* *********************************************************** */
 
 router.post('/signup', async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, phone, college, ID, mem, memNo } = req.body;
 
   try {
     const user = await User.create({
       username,
       email,
       password,
+      phone,
+      college,
+      ID,
+      mem,
+      memNo,
       isVerified: false
     });
     const token = createToken(user._id);
@@ -82,14 +95,14 @@ router.post('/signup', async (req, res) => {
     var transporter = nodemailer.createTransport({
       service: "hotmail",
       auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS
+        user: 'shreyas.shah@learner.manipal.edu',
+        pass: "shahlshreyas@19"
       }
     });
 
     const options = {
-      from: process.env.MAIL_USER,
-      to: email,
+      from: "shreyas.shah@learner.manipal.edu",
+      to: "shreyaslshah@gmail.com",
       subject: 'email verification',
       text: `go to this link: `,
       html: `<a href='http://${req.headers.host}/verify-email?uid=${user._id}'>click to verify</a>`
@@ -103,11 +116,15 @@ router.post('/signup', async (req, res) => {
       console.log('verification email sent');
     })
 
-    res.status(201).json(user);
+    // res.status(201).json(user);
+    res.status(201).json(token);
   }
 
   catch (error) {
+    console.log(error)
     let errorMessage = handleErrors(error);
+    console.log(errorMessage);
+    // res.status(400).json({ errorMessage, 'err': error.toString() })
     res.status(400).json({ errorMessage });
   }
 
@@ -147,11 +164,14 @@ router.post('/login', async (req, res) => {
     const token = createToken(user._id);
     sessionstorage.setItem('jwt', token);
 
-    res.status(200).json({ user: user.username });
+    res.status(200).json(token);
   }
   catch (error) {
+    console.log(error);
     let errorMessage = handleErrors(error);
-    res.status(400).json({ errorMessage });
+    console.log('err:', errorMessage);
+
+    res.status(400).json(errorMessage);
   }
 })
 
@@ -215,6 +235,40 @@ router.post('/reset-password', async (req, res) => {
 
   res.status(201).send('password has been reset');
 
+})
+
+router.post('/get-user', async (req, res) => {
+
+  var { uid } = req.body;
+
+  try {
+    console.log(uid);
+    const user = await User.findOne({ _id: uid });
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    console.log(user);
+    return res.json(user);
+  }
+  catch (err) {
+    console.log(err);
+  }
+})
+
+router.get("/user", async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.body.username });
+    res.json(user);
+  }
+  catch (err) {
+    console.log(err);
+  }
 })
 
 module.exports = router;
