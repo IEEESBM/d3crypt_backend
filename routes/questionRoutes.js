@@ -24,6 +24,29 @@ router.get('/', async (req, res) => {
 	}
 });
 
+router.patch('/hint', async (req, res) => {
+	let u = await User.findById(req.body.id);
+	let current = u.currentQuestion;
+	let cq = await Question.findOne({ index: u.questions[current] });
+	console.log(u.hint1_used, u.hint2_used);
+	if (u.hint1_used == false) {
+		let change = await User.findOneAndUpdate({id: u.id} , {hint1_used : true});
+		console.log(change);
+		res.send(cq.hint_1);
+	} else if (u.hint1_used == true) {
+		console.log("debug");
+		if (u.hint2_used == false) {
+			let change = await User.findOneAndUpdate({id: u.id} , {hint2_used : true});
+			// console.log(change);
+			res.send(cq.hint_2);
+		} else {
+			res.send("All hints used!");
+		}
+	}
+});
+
+
+
 router.get('/show_all', async (req, res) => {
 	try {
 		const questions = await Question.find();

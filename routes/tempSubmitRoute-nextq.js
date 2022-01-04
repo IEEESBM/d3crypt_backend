@@ -34,7 +34,6 @@ router.post('/submit', async (req, res) => {
         console.log("User advanced to the next question");
   
       }else {
-  
         console.log("WRONG ANSWER")
         await handleScore.updateResponses(false, id);
         noofattempts += 1;
