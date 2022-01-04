@@ -11,7 +11,6 @@ const handleAnswer = require ('./middleware/answerHandling');
 const handleScore = require ('./middleware/scoreHandling');
 
 const cookieParser = require('cookie-parser');
-const authRoutes = require('./routes/authRoutes');
 const questionRoutes = require('./routes/questionRoutes');
 const imageRoute = require('./routes/imageRoute');
 
