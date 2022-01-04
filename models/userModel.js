@@ -46,6 +46,16 @@ const userSchema = new mongoose.Schema({
   memNo: {
     type: Number,
   },
+
+
+  noofattemps: {
+    type: Number
+  },
+
+  responses: {
+    type: Array
+  },
+
   isVerified: Boolean,
   imgKey: {
     type: String,
