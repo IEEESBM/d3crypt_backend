@@ -5,7 +5,7 @@ function incrementScore(currentScore, isCorrect, attemptNumber) {
         ? currentScore + 100
         : attemptNumber == 2
         ? currentScore + 90
-        : attemptNumber == 2
+        : attemptNumber == 3
         ? currentScore + 80
         : currentScore + 50;
   }
