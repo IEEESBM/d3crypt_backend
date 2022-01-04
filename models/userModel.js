@@ -74,6 +74,15 @@ const userSchema = new mongoose.Schema({
   points: {
     type: Number,
   },
+
+  hint1_used:{
+    type: Boolean,
+  },
+
+  hint2_used:{
+    type: Boolean,
+  },
+
 });
 
 userSchema.pre("save", async function (next) {
@@ -95,8 +104,9 @@ userSchema.pre("save", async function (next) {
   this.questions = randomqs;
   this.currentQuestion = 0;
   this.points = 0;
+  this.hint1_used = false;
+  this.hint2_used = false;
   next();
-
 });
 
 userSchema.statics.login = async function (email, password) {
