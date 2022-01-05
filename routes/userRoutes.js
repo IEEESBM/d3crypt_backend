@@ -1,6 +1,6 @@
 const express=require('express')
 const router=express.Router()
-const User=require('../user_schema/schema.js')
+const User=require('../models/userModel');
 
 router.get('/',async(req,res)=>{
     try{
@@ -46,7 +46,6 @@ router.post('/',async(req,res)=>{
     const user= new User({
         username:req.body.username,
         points:req.body.points,
-        rank:req.body.rank,
         email:req.body.email,
         password:req.body.password,
         attempts:req.body.attempts
