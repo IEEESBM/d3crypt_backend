@@ -39,10 +39,11 @@ router.get("/image/:key", async (req, res) => {
   readStream.pipe(res);
 });
 
-router.get('/leaderboad',async(req,res)=>{
-	a=await User.find().sort( { "points": -1 } )
-  res.send(a)
-})
+router.get('/leaderboad', async (req, res) => {
+  let list = await User.find({}).sort({ "points": -1 })
+  list = list.filter(user => user.isVerified === true)
+  res.send(list)
+});
 
 
 module.exports = router;
