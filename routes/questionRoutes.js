@@ -11,7 +11,7 @@ router.get('/check', (req, res) => {
 	res.send('OK');
 })
 
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
 	try {
 		let u = await User.findById(req.body.id);
 		let current = u.currentQuestion;
