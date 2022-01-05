@@ -39,4 +39,10 @@ router.get("/image/:key", async (req, res) => {
   readStream.pipe(res);
 });
 
+router.get('/leaderboad',async(req,res)=>{
+	a=await User.find().sort( { "points": -1 } )
+  res.send(a)
+})
+
+
 module.exports = router;
