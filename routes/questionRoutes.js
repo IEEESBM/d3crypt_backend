@@ -25,24 +25,36 @@ router.get('/', async (req, res) => {
 	}
 });
 
-router.patch('/hint', async (req, res) => {
-	let u = await User.findById(req.body.id);
-	let current = u.currentQuestion;
-	let cq = await Question.findOne({ index: u.questions[current] });
-	console.log(u.hint1_used, u.hint2_used);
-	if (u.hint1_used == false) {
-		let change = await User.findOneAndUpdate({id: u.id} , {hint1_used : true});
-		console.log(change);
-		res.send(cq.hint_1);
-	} else if (u.hint1_used == true) {
-		console.log("debug");
-		if (u.hint2_used == false) {
-			let change = await User.findOneAndUpdate({id: u.id} , {hint2_used : true});
-			// console.log(change);
-			res.send(cq.hint_2);
-		} else {
-			res.send("All hints used!");
+router.put('/hint', async (req, res) => {
+	try {
+		let u = await User.findById(req.body.id);
+		let current = u.currentQuestion;
+		console.log(u.currentQuestion);
+		let cq = await Question.findOne({ index: u.questions[current] });
+		
+		//change hint cost here
+		let hint_cost = 30;
+		let pts = u.points;
+
+		if(u.hint1_used == false){
+			await User.findByIdAndUpdate(u.id, {"hint1_used" : true});
+			await User.findByIdAndUpdate(u.id, {"points": (pts-hint_cost)});
+			res.send(cq.hint_1);
+			
+		}else{
+			if(u.hint2_used == false){
+				await User.findByIdAndUpdate(u.id, {"hint2_used" : true});
+				await User.findByIdAndUpdate(u.id, {"points" : (pts-hint_cost)});
+				res.send(cq.hint_2);
+			}else{
+				res.send("All hints used!");
+			}
 		}
+		console.log(u.hint1_used, u.hint2_used);
+		console.log(u);
+		
+	} catch(err){
+		console.log(err);
 	}
 });
 
