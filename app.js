@@ -13,6 +13,7 @@ const handleScore = require ('./middleware/scoreHandling');
 const cookieParser = require('cookie-parser');
 const questionRoutes = require('./routes/questionRoutes');
 const imageRoute = require('./routes/imageRoute');
+const userRoutes = require('./routes/userRoutes');
 
 
 const app = express();
@@ -88,5 +89,6 @@ app.post('/submit', async (req, res) => {
 
 app.use(authRoutes);
 app.use('/questions', questionRoutes);
+app.use('/users', userRoutes);
 app.use(imageRoute);
 
