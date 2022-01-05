@@ -6,9 +6,7 @@ const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/authRoutes')
 var bodyParser = require('body-parser');
-
-const handleAnswer = require ('./middleware/answerHandling');
-const handleScore = require ('./middleware/scoreHandling');
+const answerRoute = require('./routes/answerRoute')
 
 const cookieParser = require('cookie-parser');
 const questionRoutes = require('./routes/questionRoutes');
@@ -70,25 +68,10 @@ app.use(authRoutes);
 
 app.use(bodyParser.urlencoded({ extended: true })); 
 
-app.post('/submit', async (req, res) => {
-    userInput = req.body.answer;
-    
-    if (await handleAnswer.checkAnswer(userInput).catch(err => console.log(err))){
-      console.log(req.body.answer + ' is the correct answer');
-      handleScore.scoreHandling(20, true, 1, [1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1]);
-    }else {
-      console.log("WRONG ANSWER")
-    }
-    res.send('Recieved your data successfully!');
-  })
 
-
-// app.listen(3000, () => {
-  //console.log('Server started!');
-//})
 
 app.use(authRoutes);
 app.use('/questions', questionRoutes);
 app.use('/users', userRoutes);
 app.use(imageRoute);
-
+app.use(answerRoute);

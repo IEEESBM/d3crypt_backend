@@ -2,8 +2,14 @@ const { Router } = require('express');
 const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const Question = require('../models/questionModel');
+const bodyParser = require('body-parser');
+
+const handleAnswer = require ('../middleware/answerHandling');
+const handleScore = require ('../middleware/scoreHandling');
 
 const router = Router();
+
+router.use(bodyParser.urlencoded({ extended: true }));
 
 //from answers-branch
 router.post('/submit', async (req, res) => {
@@ -14,14 +20,15 @@ router.post('/submit', async (req, res) => {
     //find user in db  
       let user = await User.findById(id);
       let currScore = user.points;
-      let allResponses = user.allResponses;
+      let allResponses = user.responses;
       let noofattempts = user.noofattempts;
+      let currQues = user.currentQuestion;
       console.log(currScore,allResponses,noofattempts)
   
     //check answer and if correct calculate score
   
       
-      if (await handleAnswer.checkAnswer(userInput).catch(err => console.log(err))){
+      if (await handleAnswer.checkAnswer(userInput, currQues).catch(err => console.log(err))){
   
         console.log(req.body.answer + ' is the correct answer');
         await handleScore.updateResponses(true, id);
@@ -43,11 +50,12 @@ router.post('/submit', async (req, res) => {
       }
   
       user = await User.findById(id);
-      console.log(user.points,user.allResponses,user.noofattempts)
-      res.send('Recieved your data successfully!');
+      console.log(user.points,user.responses,user.noofattempts)
+      //res.send('Recieved your data successfully!');
 
       //redirects to the next/curr question;
       //will change the route name if necessary
       res.redirect('/');
     })
   
+    module.exports = router;

@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema({
   },
 
 
-  noofattemps: {
+  noofattempts: {
     type: Number
   },
 
@@ -88,6 +88,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);
+  this.noofattempts = 1;
 
   //Random Set alloc
   console.log("saving a new set to db");

@@ -1,12 +1,11 @@
-// var userInput = 'the power of sun in the palm of my hand';
-answerArray = ['power of the sun',
-                'the power of sun in the palm of my hand',
-                'hello peter'                
-];
+const Question = require('../models/questionModel');
 
 
-async function checkAnswer(input) {
-    
+async function checkAnswer(input, quesIndex) {
+    let question = await Question.findOne({index: quesIndex});
+    let answerArray = question.answer;
+    console.log(answerArray, answerArray.length)
+
     for(let i=0; i<answerArray.length; i++){
         if(await compareInput(input, answerArray[i])){
             return true;
@@ -16,8 +15,8 @@ async function checkAnswer(input) {
 }
 
 
-async function compareInput(ans, correctAns) {
-    return ans.toLowerCase() === correctAns;
+async function compareInput(input, correctAns) {
+    return input.toLowerCase() === correctAns.toLowerCase();
 }
 
 
