@@ -23,12 +23,13 @@ router.post('/submit', async (req, res) => {
       let allResponses = user.responses;
       let noofattempts = user.noofattempts;
       let currQues = user.currentQuestion;
-      console.log(currScore,allResponses,noofattempts)
-  
+      let qIndex = user.questions[currQues-1];
+      console.log(currScore,allResponses,noofattempts,qIndex)
+
     //check answer and if correct calculate score
   
       
-      if (await handleAnswer.checkAnswer(userInput, currQues).catch(err => console.log(err))){
+      if (await handleAnswer.checkAnswer(userInput, qIndex).catch(err => console.log(err))){
   
         console.log(req.body.answer + ' is the correct answer');
         await handleScore.updateResponses(true, id);

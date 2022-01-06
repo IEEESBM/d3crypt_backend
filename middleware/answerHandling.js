@@ -20,9 +20,5 @@ async function compareInput(input, correctAns) {
 }
 
 
-// checkAnswer(userInput)
-// .then(data => { console.log(data);} )
-// .catch(error => { console.log (error)} )
-
 
 module.exports = { checkAnswer }
