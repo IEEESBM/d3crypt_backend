@@ -44,14 +44,15 @@ router.delete('/:id', async (req, res) => {
 
 router.put('/edit/:id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
-        user.username = req.body.username;
-        user.phone = req.body.phone;
-        user.college = req.body.college;
-        user.email = req.body.email;
-        user.ID = req.body.id;
-        user.memNo = req.body.memNo;
-        console.log(user);
+        const doc = await User.findByIdAndUpdate(req.params.id, {
+            "username": req.body.username,
+            "phone": req.body.phone,
+            "college": req.body.college,
+            "email": req.body.email,
+            "ID": req.body.ID,
+            "memNo": req.body.memNo
+        });
+        console.log(doc);
         res.send("Updated");
     } catch (err) {
         res.send(err);
