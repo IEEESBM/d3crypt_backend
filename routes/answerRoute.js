@@ -14,8 +14,8 @@ router.use(bodyParser.urlencoded({ extended: true }));
 //from answers-branch
 router.post('/submit', async (req, res) => {
     //get data from user
-      userInput = req.body.answer;
-      id = req.body.userId;
+      let userInput = req.body.answer;
+      let id = req.body.id;
     
     //find user in db  
       let user = await User.findById(id);
@@ -23,7 +23,7 @@ router.post('/submit', async (req, res) => {
       let allResponses = user.responses;
       let noofattempts = user.noofattempts;
       let currQues = user.currentQuestion;
-      let qIndex = user.questions[currQues-1];
+      let qIndex = user.questions[currQues];
       console.log(currScore,allResponses,noofattempts,qIndex)
 
     //check answer and if correct calculate score
