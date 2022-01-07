@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 
-//these routes have errors !
+//these routes have errors ! refer userRoutes.js!!!
 
 router.get('/Allusers', async (req, res) => {
     User.find({}, (error, data) => {
