@@ -242,7 +242,7 @@ router.post('/get-user', async (req, res) => {
   var { uid } = req.body;
 
   try {
-    console.log(uid);
+    // console.log(uid);
     const user = await User.findOne({ _id: uid });
     return res.status(200).json(user);
   } catch (error) {
