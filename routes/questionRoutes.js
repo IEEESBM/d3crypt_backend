@@ -24,40 +24,6 @@ router.post('/', async (req, res) => {
 	}
 });
 
-router.put('/hint', async (req, res) => {
-	try {
-		let u = await User.findById(req.body.id);
-		let current = u.currentQuestion;
-		console.log(u.currentQuestion);
-		let cq = await Question.findOne({ index: u.questions[current] });
-		
-		//change hint cost here
-		let hint_cost = 30;
-		let pts = u.points;
-
-		if(u.hint1_used == false){
-			await User.findByIdAndUpdate(u.id, {"hint1_used" : true});
-			await User.findByIdAndUpdate(u.id, {"points": (pts-hint_cost)});
-			res.send(cq.hint_1);
-			
-		}else{
-			if(u.hint2_used == false){
-				await User.findByIdAndUpdate(u.id, {"hint2_used" : true});
-				await User.findByIdAndUpdate(u.id, {"points" : (pts-hint_cost)});
-				res.send(cq.hint_2);
-			}else{
-				res.send("All hints used!");
-			}
-		}
-		console.log(u.hint1_used, u.hint2_used);
-		console.log(u);
-		
-	} catch(err){
-		console.log(err);
-	}
-});
-
-
 
 router.get('/show_all', async (req, res) => {
 	try {
