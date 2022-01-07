@@ -4,61 +4,92 @@ const User = require('../models/userModel');
 const Question = require('../models/questionModel');
 const bodyParser = require('body-parser');
 
-const handleAnswer = require ('../middleware/answerHandling');
-const handleScore = require ('../middleware/scoreHandling');
+const handleAnswer = require('../middleware/answerHandling');
+const handleScore = require('../middleware/scoreHandling');
 
 const router = Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
 
-//from answers-branch
 router.post('/submit', async (req, res) => {
-    //get data from user
-      let userInput = req.body.answer;
-      let id = req.body.id;
-    
-    //find user in db  
-      let user = await User.findById(id);
-      let currScore = user.points;
-      let allResponses = user.responses;
-      let noofattempts = user.noofattempts;
-      let currQues = user.currentQuestion;
-      let qIndex = user.questions[currQues];
-      console.log(currScore,allResponses,noofattempts,qIndex)
+  //get data from user
+  let userInput = req.body.answer;
+  let id = req.body.id;
 
+  //find user in db  
+  let user = await User.findById(id);
+  let currScore = user.points;
+  let allResponses = user.responses;
+  let noofattempts = user.noofattempts;
+  let currQues = user.currentQuestion;
+  let qIndex = user.questions[currQues];
+  console.log(currScore, allResponses, noofattempts, qIndex)
+
+  //edge-case
+  if (currQues == 15) {
+    res.send("CONGRATULATIONS! YOU'RE DONE!!!");
+    //show leaderboard
+  } else {
     //check answer and if correct calculate score
-  
-      
-      if (await handleAnswer.checkAnswer(userInput, qIndex).catch(err => console.log(err))){
-  
-        console.log(req.body.answer + ' is the correct answer');
-        await handleScore.updateResponses(true, id);
-        await handleScore.scoreHandling(currScore, true, noofattempts, allResponses, id);
-        await user.updateOne({ noofattempts: 1 });
+    if (await handleAnswer.checkAnswer(userInput, qIndex).catch(err => console.log(err))) {
 
-        //go to next question:
-        let next = user.currentQuestion + 1;
-        await user.updateOne({currentQuestion: next});
-        console.log("User advanced to the next question");
+      console.log(req.body.answer + ' is the correct answer');
+      await handleScore.updateResponses(true, id);
+      await handleScore.scoreHandling(currScore, true, noofattempts, allResponses, id);
+      await user.updateOne({ noofattempts: 1 });
 
-        res.status(200).json({isCorrect: true});
+      //go to next question:
+      let next = user.currentQuestion + 1;
+      await user.updateOne({ currentQuestion: next });
+      console.log("User advanced to the next question");
 
-      }else {
-        console.log("WRONG ANSWER")
-        await handleScore.updateResponses(false, id);
-        noofattempts += 1;
-        await user.updateOne({ noofattempts: noofattempts })
-        
-        res.status(200).json({isCorrect: false});
+      res.status(200).json({ isCorrect: true });
+
+    } else {
+      console.log("WRONG ANSWER")
+      await handleScore.updateResponses(false, id);
+      noofattempts += 1;
+      await user.updateOne({ noofattempts: noofattempts })
+
+      res.status(200).json({ isCorrect: false });
+    }
+  }
+  // res.redirect('/');
+});
+
+router.put('/hint', async (req, res) => {
+  try {
+    let u = await User.findById(req.body.id);
+    let current = u.currentQuestion;
+    console.log(u.currentQuestion);
+    let cq = await Question.findOne({ index: u.questions[current] });
+
+    //change hint cost here
+    let hint_cost = 30;
+    let hint_cost2 = 50;
+    let pts = u.points;
+
+    if (u.hint1_used == false) {
+      await User.findByIdAndUpdate(u.id, { "hint1_used": true });
+      await User.findByIdAndUpdate(u.id, { "points": (pts - hint_cost) });
+      res.send(cq.hint_1);
+
+    } else {
+      if (u.hint2_used == false) {
+        await User.findByIdAndUpdate(u.id, { "hint2_used": true });
+        await User.findByIdAndUpdate(u.id, { "points": (pts - hint_cost2) });
+        res.send(cq.hint_2);
+      } else {
+        res.send("All hints used!");
       }
-  
-      // user = await User.findById(id);
-      // console.log(user.points,user.responses,user.noofattempts)
-      //res.send('Recieved your data successfully!');
+    }
+    console.log(u.hint1_used, u.hint2_used);
+    console.log(u);
 
-      //redirects to the next/curr question;
-      //will change the route name if necessary
-      // res.redirect('/');
-    })
-  
-    module.exports = router;
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
+module.exports = router;
