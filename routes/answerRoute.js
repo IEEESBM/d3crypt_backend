@@ -39,23 +39,25 @@ router.post('/submit', async (req, res) => {
         let next = user.currentQuestion + 1;
         await user.updateOne({currentQuestion: next});
         console.log("User advanced to the next question");
-  
+
+        res.status(200).json({isCorrect: true});
+
       }else {
         console.log("WRONG ANSWER")
         await handleScore.updateResponses(false, id);
         noofattempts += 1;
         await user.updateOne({ noofattempts: noofattempts })
         
-  
+        res.status(200).json({isCorrect: false});
       }
   
-      user = await User.findById(id);
-      console.log(user.points,user.responses,user.noofattempts)
+      // user = await User.findById(id);
+      // console.log(user.points,user.responses,user.noofattempts)
       //res.send('Recieved your data successfully!');
 
       //redirects to the next/curr question;
       //will change the route name if necessary
-      res.redirect('/');
+      // res.redirect('/');
     })
   
     module.exports = router;
