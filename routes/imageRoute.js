@@ -30,9 +30,14 @@ router.post("/user-img", async (req, res) => {
   res.send('user schema updated with image key');
 });
 
+router.post("/delete-image/:key", async (req, res) => {
+  const key = req.params.key;
+  console.log(`Request to delete image of key ${key}`)
+res.send("Image deleted successfully")
+});
+
 
 router.get("/image/:key", async (req, res) => {
-  console.log("Getting img")
   const key = req.params.key;
   const readStream = getFileStream(key);
 
