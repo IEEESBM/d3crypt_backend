@@ -3,7 +3,7 @@ const router = Router();
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
-const { uploadFile, getFileStream } = require("./s3");
+const { uploadFile, getFileStream, deleteImage } = require("./s3");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const User = require("../models/userModel");
@@ -32,8 +32,13 @@ router.post("/user-img", async (req, res) => {
 
 router.post("/delete-image/:key", async (req, res) => {
   const key = req.params.key;
-  console.log(`Request to delete image of key ${key}`)
-res.send("Image deleted successfully")
+  try {
+    console.log(`Request to delete image of key ${key}`)
+    await deleteImage(key);
+    res.send("Image deleted successfully")
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 

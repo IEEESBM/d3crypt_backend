@@ -26,7 +26,7 @@ function uploadFile(file) {
 }
 
 // downloads photo from s3
-function getFileStream(fileKey){
+function getFileStream(fileKey) {
   const downloadParams = {
     Key: fileKey,
     Bucket: bucketName
@@ -35,6 +35,20 @@ function getFileStream(fileKey){
   return s3.getObject(downloadParams).createReadStream();
 }
 
+function deleteImage(fileKey) {
+  s3.deleteObject({
+    Bucket: bucketName,
+    Key: fileKey
+  },
+    function (err, data) {
+      if (err)
+        console.log(err);
+      else
+        console.log('successfully deleted file');
+      console.log(data);
+    })
+}
 
 
-module.exports = {uploadFile, getFileStream};
+
+module.exports = { uploadFile, getFileStream, deleteImage };
