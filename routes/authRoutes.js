@@ -102,7 +102,7 @@ router.post('/signup', async (req, res) => {
 
     const options = {
       from: "shreyas.shah@learner.manipal.edu",
-      to: "shreyaslshah@gmail.com",
+      to: email,
       subject: 'email verification',
       text: `go to this link: `,
       html: `<a href='http://${req.headers.host}/verify-email?uid=${user._id}'>click to verify</a>`
