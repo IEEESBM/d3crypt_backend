@@ -1,42 +1,47 @@
 const jwt = require('jsonwebtoken');
-const sessionstorage = require('sessionstorage');
 const User = require('../models/userModel');
+
+
+const checkJWT = async (req, res, next) => {
+
+  const token= req.headers['x-access-token'];
+  // console.log('Token ',token);
+  if (token) {
+    jwt.verify(token, 'jwt secret', (err,decoded) => {
+      if (err) {
+        console.log(err.message);
+        return res.json({'err':'Not authorized'});
+      } else {
+        req.userId= decoded.id;
+        // console.log(req.userId);
+        next();
+      }
+    });
+  } else {
+    return res.status(403).json({message: "Token not found"});
+  }
+}
 
 const checkIsVerified = async (req, res, next) => {
 
   try {
-    const token = sessionstorage.getItem('jwt');
-    var base64Payload = token.split('.')[1];
-    var payload = Buffer.from(base64Payload, 'base64');
-    var userID = JSON.parse(payload.toString()).id;
+    // const token= req.headers['x-access-token'];
+    // var base64Payload = token.split('.')[1];
+    // var payload = Buffer.from(base64Payload, 'base64');
+    // var userID = JSON.parse(payload.toString()).id;
+    const userID = req.userId;
+    // console.log('Verify ',userID);
     var user = await User.findOne({ _id: userID });
     if (user.isVerified === true) {
       next();
     }
     else {
-      res.redirect('/login');
+      return res.status(400).json({'err':'Not verified'});
     }
   } catch (error) {
-    res.redirect('/login');
+    return res.status(500).json({'err':error.toString()});
   }
 
-}
-
-const checkJWT = async (req, res, next) => {
-
-  const token = sessionstorage.getItem('jwt');
-  if (token) {
-    jwt.verify(token, 'jwt secret', (err) => {
-      if (err) {
-        console.log(err.message);
-        res.redirect('/login');
-      } else {
-        next();
-      }
-    });
-  } else {
-    res.redirect('/login');
-  }
 }
 
 module.exports = { checkIsVerified, checkJWT };

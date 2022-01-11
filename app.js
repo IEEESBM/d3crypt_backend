@@ -14,6 +14,8 @@ const imageRoute = require('./routes/imageRoute');
 const userRoutes = require('./routes/userRoutes');
 // const profileRoutes = require('./routes/profileRoutes');
 
+const { checkIsVerified, checkJWT } = require('./middleware/authMiddleware');
+
 
 const app = express();
 
@@ -63,7 +65,10 @@ mongoose.connect("mongodb+srv://admin:admin123@cluster0.ltics.mongodb.net/?retry
   .then(console.log("Connected to DB"))
   .catch((err) => console.log(err));
   
-
+app.get("/test",checkJWT,checkIsVerified,async(req,res)=>{
+  console.log(req.userId);
+  return res.json({'user':req.userId});
+})
 
 app.use(authRoutes);
 
