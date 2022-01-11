@@ -11,7 +11,7 @@ router.get('/check', (req, res) => {
 	res.send('OK');
 })
 
-router.post('/', async (req, res) => {
+router.get('/', async (req, res) => {
 	try {
 		let u = await User.findById(req.body.id);
 		let current = u.currentQuestion;
@@ -21,6 +21,10 @@ router.post('/', async (req, res) => {
 		res.send(cq);
 	} catch (err) {
 		console.log(err);
+		res.status(404).json({
+			msg: "Question Not Found!",
+			body: err
+		});
 	}
 });
 
