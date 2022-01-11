@@ -12,12 +12,13 @@ const router = Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 
 router.post('/submit', async (req, res) => {
+  console.log("entered submit route");
   //get data from user
   let userInput = req.body.answer;
   let id = req.body.id;
-
+  
   //find user in db  
-  let user = await User.findById(id);
+  let user = await User.findOne({ _id: id });
   let currScore = user.points;
   let allResponses = user.responses;
   let noofattempts = user.noofattempts;
