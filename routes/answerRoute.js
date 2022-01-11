@@ -16,7 +16,7 @@ router.post('/submit', async (req, res) => {
   //get data from user
   let userInput = req.body.answer;
   let id = req.body.id;
-  
+
   //find user in db  
   let user = await User.findOne({ _id: id });
   let currScore = user.points;
@@ -88,7 +88,10 @@ router.put('/hint', async (req, res) => {
     console.log(u);
 
   } catch (err) {
-    console.log(err);
+    res.status(404).json({
+      msg: "Error",
+      body: err
+    });
   }
 });
 
