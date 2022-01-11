@@ -15,7 +15,7 @@ const router = Router();
 const handleErrors = (error) => {
   console.log(error);
 
-  let errorMessage = { username: '', email: '', password: '', phone: '', ID: '', mem: '' };
+  let errorMessage = { username: '', email: '', password: '', phone: '', ID: '', mem: '',verify:'' };
   console.log(error.message)
   // wrong email/password during login error
   if (error.message === 'incorrect email') {
@@ -23,6 +23,9 @@ const handleErrors = (error) => {
   }
   if (error.message === 'incorrect password') {
     errorMessage.password = 'Password is Incorrect';
+  }
+  if (error.message === 'not verified') {
+    errorMessage.verify = 'Account is not Verified';
   }
 
   // username/email not available during signup error
@@ -102,7 +105,7 @@ router.post('/signup', async (req, res) => {
 
     const options = {
       from: "shreyas.shah@learner.manipal.edu",
-      to: "shreyaslshah@gmail.com",
+      to: email,
       subject: 'email verification',
       text: `go to this link: `,
       html: `<a href='http://${req.headers.host}/verify-email?uid=${user._id}'>click to verify</a>`
