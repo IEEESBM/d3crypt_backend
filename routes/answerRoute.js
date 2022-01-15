@@ -85,6 +85,11 @@ router.put('/hint', async (req, res) => {
           {"hint1":cq.hint_1,
         "hint2":cq.hint_2
       });
+      } else {
+        res.json(
+          {"hint1":cq.hint_1,
+        "hint2":cq.hint_2
+      });
       }
     }
     console.log(u.hint1_used, u.hint2_used);
