@@ -73,15 +73,18 @@ router.put('/hint', async (req, res) => {
     if (u.hint1_used == false) {
       await User.findByIdAndUpdate(u.id, { "hint1_used": true });
       await User.findByIdAndUpdate(u.id, { "points": (pts - hint_cost) });
-      res.send(cq.hint_1);
+      res.json({"hint1":cq.hint_1,
+      "hint2":""
+    });
 
     } else {
       if (u.hint2_used == false) {
         await User.findByIdAndUpdate(u.id, { "hint2_used": true });
         await User.findByIdAndUpdate(u.id, { "points": (pts - hint_cost2) });
-        res.send(cq.hint_2);
-      } else {
-        res.send("All hints used!");
+        res.json(
+          {"hint1":cq.hint_1,
+        "hint2":cq.hint_2
+      });
       }
     }
     console.log(u.hint1_used, u.hint2_used);
