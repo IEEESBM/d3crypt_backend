@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/userModel');
+const bcrypt = require("bcrypt");
 var mongoose = require('mongoose');
 router.get('/', async (req, res) => {
     try {
@@ -14,17 +15,20 @@ router.get('/', async (req, res) => {
 router.get('/u', async (req, res) => {
 
     try {
-        console.log("1");
-        console.log(req.query.id);
+       
+       
+       const pwd = await bcrypt.hash(req.query.password, 10);
+        console.log(pwd);
         console.log(req.query.password);
-        console.log(req.query.username);
+        
         const doc = await User.findByIdAndUpdate(req.query.id, {
             username: req.query.username,
-            password: req.query.password,
+            
             phone: req.query.phone,
             ID: req.query.ID,
             college: req.query.college,
             memNo: req.query.memNo,
+            password:pwd
         });
         console.log(doc);
         res.send("Updated");
