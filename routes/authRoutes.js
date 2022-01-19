@@ -215,22 +215,16 @@ router.post("/forgot", async (req, res) => {
 
     console.log(link);
 
-    let transporter = nodemailer.createTransport({
-      service: "Outlook365",
-      host: "smtp.office365.com",
-      port: "587",
-      tls: {
-        ciphers: "SSLv3",
-        rejectUnauthorized: false,
-      },
+    var transporter = nodemailer.createTransport({
+      service: "hotmail",
       auth: {
-        user: "temp_certman@outlook.com",
-        pass: "123@ABC@abc",
+        user: "shreyas.shah@learner.manipal.edu",
+        pass: "shahlshreyas@19",
       },
     });
 
     const options = {
-      from: "temp_certman@outlook.com",
+      from: "shreyas.shah@learner.manipal.edu",
       to: email,
       subject: "password reset link",
       text: `go to this link: `,
