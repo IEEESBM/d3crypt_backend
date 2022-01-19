@@ -18,7 +18,9 @@ router.post('/', async (req, res) => {
 		console.log(u.currentQuestion);
 		let cq = await Question.findOne({ index: u.questions[current] });
 		console.log(cq);
-		res.send(cq);
+		res.json({'question':cq,
+	'user':u
+	});
 	} catch (err) {
 		console.log(err);
 		res.status(404).json({
