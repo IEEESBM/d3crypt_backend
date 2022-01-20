@@ -203,6 +203,12 @@ router.post("/forgot", async (req, res) => {
       error: "User does not exist!",
       data: "",
     });
+  } else if (user.isVerified == false) {
+    return res.json({
+      status: "error",
+      error: "User is not verified!",
+      data: "",
+    });
   } else {
     const secret = JWT_SECRET + user.password;
     const payload = {
@@ -215,16 +221,22 @@ router.post("/forgot", async (req, res) => {
 
     console.log(link);
 
-    var transporter = nodemailer.createTransport({
-      service: "hotmail",
+    let transporter = nodemailer.createTransport({
+      service: "Outlook365",
+      host: "smtp.office365.com",
+      port: "587",
+      tls: {
+        ciphers: "SSLv3",
+        rejectUnauthorized: false,
+      },
       auth: {
-        user: "shreyas.shah@learner.manipal.edu",
-        pass: "shahlshreyas@19",
+        user: "temp_certman@outlook.com",
+        pass: "123@ABC@abc",
       },
     });
 
     const options = {
-      from: "shreyas.shah@learner.manipal.edu",
+      from: "temp_certman@outlook.com",
       to: email,
       subject: "password reset link",
       text: `go to this link: `,
@@ -242,7 +254,7 @@ router.post("/forgot", async (req, res) => {
 });
 
 router.patch("/reset", async (req, res) => {
-  const { id, token, pass } = req.body;
+  const { id, token, newPass } = req.body;
   const user = await User.findOne({ id }).lean();
   if (!user) {
     return res.json({
@@ -250,9 +262,16 @@ router.patch("/reset", async (req, res) => {
       error: "User does not exist!",
       data: "",
     });
+  } else if (!token) {
+    return res.json({
+      status: "error",
+      error: "No valid token!",
+      data: "",
+    });
   } else {
     try {
-      const hash_password = await bcrypt.hash(pass, 10);
+      console.log(newPass);
+      const hash_password = await bcrypt.hash(newPass, 10);
       const updatedUser = await User.updateOne(
         { _id: id },
         {
@@ -300,4 +319,5 @@ router.get("/user", async (req, res) => {
 });
 
 module.exports = router;
+
 
