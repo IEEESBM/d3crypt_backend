@@ -79,6 +79,13 @@ router.get("/", checkIsVerified, checkJWT, async (req, res) => {
 
 /* *********************************************************** */
 
+router.get('/check-verified', checkIsVerified, checkJWT, async (req, res) => {
+  res.send("allow_access");
+})
+
+
+/* *********************************************************** */
+
 router.get("/signup", (req, res) => {
   res.send("signup page");
 });
