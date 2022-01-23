@@ -15,7 +15,11 @@ router.post('/submit', async (req, res) => {
   console.log("entered submit route");
   //get data from user
   let userInput = req.body.answer;
-  let id = req.body.id;
+  let token = req.body.token;
+  var base64Payload = token.split(".")[1];
+  var payload = Buffer.from(base64Payload, "base64");
+  var id = JSON.parse(payload.toString()).id;
+
 
   //find user in db  
   let user = await User.findOne({ _id: id });
