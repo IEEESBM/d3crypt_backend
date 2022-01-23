@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-let questionNumber = 1;
-
 const questionSchema = new mongoose.Schema({
   title: {
     type: String, 
@@ -41,17 +39,9 @@ function validateDifficulty(n) {return (n <= 3 && n >= 1)}
 questionSchema.pre('save', async function (next) {
   console.log("saving a new question to db");
 
-  // if(this.difficulty == 1){
-  //   this.points == 100;
-  // }else if(this.difficulty == 2){
-  //   this.points == 200;
-  // }else{
-  //   this.points == 300;
-  // }
-
-  // this.index = questionNumber;
-  // questionNumber++;
-  // console.log("New Index set");
+  let diff = await this.difficulty;
+  this.points = await this.difficulty*100;
+  console.log(this);
   next();
 });
 

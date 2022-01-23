@@ -42,6 +42,8 @@ router.post('/submit', async (req, res) => {
       //go to next question:
       let next = user.currentQuestion + 1;
       await user.updateOne({ currentQuestion: next });
+      await user.updateOne({ hint1_used: false });
+      await user.updateOne({ hint2_used: false });
       console.log("User advanced to the next question");
 
       res.status(200).json({ isCorrect: true });

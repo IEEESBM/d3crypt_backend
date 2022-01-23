@@ -1,15 +1,17 @@
 const User = require('../models/userModel');
+const Question = require('../models/questionModel');
 
-async function incrementScore(currentScore, isCorrect, attemptNumber) {
+
+async function incrementScore(currentScore, isCorrect, attemptNumber, qpoints) {
   if (isCorrect) {
     currentScore =
       attemptNumber == 1
-        ? currentScore + 100
+        ? currentScore + qpoints
         : attemptNumber == 2
-          ? currentScore + 90
+          ? currentScore + 0.9*qpoints
           : attemptNumber == 3
-            ? currentScore + 80
-            : currentScore + 50;
+            ? currentScore + 0.8*qpoints
+            : currentScore + 0.5*qpoints;
   }
   return currentScore;
 }
@@ -45,17 +47,22 @@ async function updateResponses(isCorrect, id) {
 
 // to be done
 async function scoreHandling(currentScore, isCorrect, attemptNumber, responses, id) {
-  let points = await incrementScore(currentScore, isCorrect, attemptNumber);
-  let currBonus = await addStreakBonus(responses);
   const user = await User.findById(id);
+  let currQues = user.currentQuestion;
+  let qIndex = user.questions[currQues];
+  let question = await Question.findOne({index: qIndex});
+  let qpoints = question.points;
+  let currPoints = await incrementScore(currentScore, isCorrect, attemptNumber, qpoints);
+  let currBonus = await addStreakBonus(responses);
+  
 
   //update user db
 
-  console.log('score is ' + points);
+  console.log('score is ' + currPoints);
   console.log('bonus is ' + currBonus);
 
 
-  await user.updateOne({ points: points + currBonus })
+  await user.updateOne({ points: currPoints + currBonus })
 }
 
 
