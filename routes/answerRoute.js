@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const Question = require('../models/questionModel');
 const bodyParser = require('body-parser');
+const { checkIsVerified, checkJWT } = require("../middleware/authMiddleware");
 
 const handleAnswer = require('../middleware/answerHandling');
 const handleScore = require('../middleware/scoreHandling');
@@ -64,9 +65,10 @@ router.post('/submit', async (req, res) => {
   // res.redirect('/');
 });
 
-router.put('/hint', async (req, res) => {
+router.put('/hint',checkIsVerified, checkJWT, async (req, res) => {
   try {
-    let u = await User.findById(req.body.id);
+    let u = await User.findById(req.userId);
+    console.log('user: ', u);
     let current = u.currentQuestion;
     console.log(u.currentQuestion);
     let cq = await Question.findOne({ index: u.questions[current] });

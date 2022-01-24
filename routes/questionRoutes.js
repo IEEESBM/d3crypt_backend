@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const User = require("../models/userModel");
 const Question = require("../models/questionModel");
 const res = require("express/lib/response");
+const { checkJWT, checkIsVerified } = require("../middleware/authMiddleware");
 
 const router = Router();
 
@@ -10,15 +11,15 @@ router.get("/check", (req, res) => {
   res.send("OK");
 });
 
-router.get("/", async (req, res) => {
+router.get("/",checkJWT, checkIsVerified, async (req, res) => {
   try {
 	
-    let token = req.headers["x-access-token"];
-	console.log(req)
-	console.log(token)
-    var base64Payload = token.split(".")[1];
-    var payload = Buffer.from(base64Payload, "base64");
-    var userID = JSON.parse(payload.toString()).id;
+    // let token = req.headers["x-access-token"];
+		console.log(req)
+    // var base64Payload = token.split(".")[1];
+    // var payload = Buffer.from(base64Payload, "base64");
+    var userID = req.userId;
+    console.log(userID);
     var u = await User.findOne({ _id: userID });
     let current = u.currentQuestion;
 

@@ -83,13 +83,13 @@ router.get('/check-verified', checkIsVerified, checkJWT, async (req, res) => {
   res.send("allow_access");
 })
 
-router.get('/user',async(req,res)=>{
+router.get('/user',checkJWT, checkIsVerified, async(req,res)=>{
   try {
     // const token = sessionstorage.getItem('jwt');
-    let token = req.headers['x-access-token'];
-    var base64Payload = token.split('.')[1];
-    var payload = Buffer.from(base64Payload, 'base64');
-    var userID = JSON.parse(payload.toString()).id;
+    // let token = req.headers['x-access-token'];
+    // var base64Payload = token.split('.')[1];
+    // var payload = Buffer.from(base64Payload, 'base64');
+    var userID = req.userId;
     var user = await User.findOne({ _id: userID });
     return res.json(user)
    
@@ -302,12 +302,12 @@ router.patch("/reset", async (req, res) => {
   }
 });
 
-router.post("/get-user", async (req, res) => {
-  var { uid } = req.body;
+router.post("/get-user",checkIsVerified, checkJWT, async (req, res) => {
+  // var { uid } = req.body;
 
   try {
     // console.log(uid);
-    const user = await User.findOne({ _id: uid });
+    const user = await User.findOne({ _id: req.userId });
     return res.status(200).json(user);
   } catch (error) {
     console.log(error);
