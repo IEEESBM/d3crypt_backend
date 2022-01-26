@@ -15,7 +15,7 @@ router.get("/",checkJWT, checkIsVerified, async (req, res) => {
   try {
 	
     // let token = req.headers["x-access-token"];
-		console.log(req)
+		// console.log(req)
     // var base64Payload = token.split(".")[1];
     // var payload = Buffer.from(base64Payload, "base64");
     var userID = req.userId;
