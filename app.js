@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 const questionRoutes = require('./routes/questionRoutes');
 const imageRoute = require('./routes/imageRoute');
 const userRoutes = require('./routes/userRoutes');
-// const profileRoutes = require('./routes/profileRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 const { checkIsVerified, checkJWT } = require('./middleware/authMiddleware');
 
@@ -82,4 +82,4 @@ app.use('/questions', questionRoutes);
 app.use('/users', userRoutes);
 app.use(imageRoute);
 app.use(answerRoute);
-// app.use(profileRoutes);
+app.use(profileRoutes);

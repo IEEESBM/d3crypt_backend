@@ -132,17 +132,29 @@ router.post("/signup", async (req, res) => {
     });
     const token = createToken(user._id);
     sessionstorage.setItem("jwt", token);
-
-    var transporter = nodemailer.createTransport({
-      service: "hotmail",
+    
+    // var transporter = nodemailer.createTransport("SMTP",{
+    //   service: "hotmail",
+    //   auth: {
+    //     user:"shriti.chandra@learner.manipal.edu",
+    //     pass:"Chandra@2018",
+    //   },
+    // });
+    var transporter = nodemailer.createTransport( {
+      host: "smtp-mail.outlook.com", // hostname
+      secureConnection: false, // TLS requires secureConnection to be false
+      port: 587, // port for secure SMTP
       auth: {
-        user: "shreyas.shah@learner.manipal.edu",
-        pass: "shahlshreyas@19",
+          user: "shriti.chandra@learner.manipal.edu",
+          pass: "Chandra@2018"
       },
-    });
+      tls: {
+          ciphers:'SSLv3'
+      }
+  });
 
     const options = {
-      from: "shreyas.shah@learner.manipal.edu",
+      from: "shriti.chandra@learner.manipal.edu",
       to: email,
       subject: "email verification",
       text: `go to this link: `,
@@ -238,18 +250,29 @@ router.post("/forgot", async (req, res) => {
     };
     const token = jwt.sign(payload, secret, { expiresIn: "15m" });
 
-    const link = `http://localhost:3000/reset/${user._id}/${token}`;
+    const link = `https://decrypt-ieeesbm.herokuapp.com/reset/${user._id}/${token}`;
 
     console.log(link);
 
-    var transporter = nodemailer.createTransport({
-      service: "hotmail",
+    // var transporter = nodemailer.createTransport({
+    //   service: "hotmail",
+    //   auth: {
+    //     user: "shreyas.shah@learner.manipal.edu",
+    //     pass: "shahlshreyas@19",
+    //   },
+    // });
+    var transporter = nodemailer.createTransport( {
+      host: "smtp-mail.outlook.com", // hostname
+      secureConnection: false, // TLS requires secureConnection to be false
+      port: 587, // port for secure SMTP
       auth: {
-        user: "shreyas.shah@learner.manipal.edu",
-        pass: "shahlshreyas@19",
+          user: "shriti.chandra@learner.manipal.edu",
+          pass: "Chandra@2018"
       },
-    });
-
+      tls: {
+          ciphers:'SSLv3'
+      }
+  });
     const options = {
       from: "shreyas.shah@learner.manipal.edu",
       to: email,
