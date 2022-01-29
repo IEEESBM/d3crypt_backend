@@ -16,6 +16,7 @@ const userRoutes = require('./routes/userRoutes');
 
 const { checkIsVerified, checkJWT } = require('./middleware/authMiddleware');
 
+const port = process.env.PORT || 4000;
 
 const app = express();
 
@@ -58,7 +59,7 @@ mongoose.connect("mongodb+srv://admin:admin123@cluster0.ltics.mongodb.net/?retry
   useUnifiedTopology: true,
 })
 
-  .then(app.listen(4000))
+  .then(app.listen(port))
 
 
 
