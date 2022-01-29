@@ -274,7 +274,7 @@ router.post("/forgot", async (req, res) => {
       }
   });
     const options = {
-      from: "shreyas.shah@learner.manipal.edu",
+      from: "shriti.chandra@learner.manipal.edu",
       to: email,
       subject: "password reset link",
       text: `go to this link: `,
