@@ -3,6 +3,8 @@ const router = express.Router()
 const User = require('../models/userModel');
 const bcrypt = require("bcrypt");
 var mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+var idy;
 router.get('/', async (req, res) => {
     try {
         const users = await User.find()
@@ -15,24 +17,26 @@ router.get('/', async (req, res) => {
 router.get('/u', async (req, res) => {
 
     try {
-       
-       
-       const pwd = await bcrypt.hash(req.query.password, 10);
-        console.log(pwd);
-        console.log(req.query.password);
         
-        const doc = await User.findByIdAndUpdate(req.query.id, {
-            username: req.query.username,
+        
+       
+       
+       console.log("idy:");
+    console.log(idy);
+        
+    const doc = await User.findByIdAndUpdate(idy, {
+        username: req.query.username,
             
-            phone: req.query.phone,
-            ID: req.query.ID,
-            college: req.query.college,
-            memNo: req.query.memNo,
-            password:pwd
-        });
+        phone: req.query.phone,
+        ID: req.query.ID,
+        college: req.query.college,
+       
+      
+    });
         console.log(doc);
         res.send("Updated");
     } catch (err) {
+        console.log(err);
         res.send(err);
     }
 })
@@ -40,10 +44,20 @@ router.get('/u', async (req, res) => {
 
 router.get('/:idy', async (req, res) => {
     try {
+     
         var final = req.query.id;
-
-
-        //console.log(final);
+       
+        
+        var base64Payload = final.split(".")[1];
+       
+        var payload = Buffer.from(base64Payload, "base64");
+        
+        var userID = JSON.parse(payload.toString()).id;
+       
+       
+        final=userID;
+        idy=final;
+        console.log(final);
         const user = await User.findById(final);
         res.json(user);
 
