@@ -6,6 +6,9 @@ const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const { checkIsVerified, checkJWT } = require("../middleware/authMiddleware");
 const res = require("express/lib/response");
+const verifyTemplate = require("../mail-templates/verify-template");
+const passwordTemplate = require("../mail-templates/password-template");
+const verifiedPage = require("../mail-templates/verified-page");
 const JWT_SECRET = "decryptjwtsecret";
 
 const router = Router();
@@ -83,7 +86,7 @@ router.get('/check-verified', checkIsVerified, checkJWT, async (req, res) => {
   res.send("allow_access");
 })
 
-router.get('/user',checkJWT, checkIsVerified, async(req,res)=>{
+router.get('/user', checkJWT, checkIsVerified, async (req, res) => {
   try {
     // const token = sessionstorage.getItem('jwt');
     // let token = req.headers['x-access-token'];
@@ -92,9 +95,9 @@ router.get('/user',checkJWT, checkIsVerified, async(req,res)=>{
     var userID = req.userId;
     var user = await User.findOne({ _id: userID });
     return res.json(user)
-   
+
   } catch (error) {
-    return res.json({ error: error.message});
+    return res.json({ error: error.message });
   }
 
 })
@@ -132,7 +135,7 @@ router.post("/signup", async (req, res) => {
     });
     const token = createToken(user._id);
     sessionstorage.setItem("jwt", token);
-    
+
     // var transporter = nodemailer.createTransport("SMTP",{
     //   service: "hotmail",
     //   auth: {
@@ -140,25 +143,29 @@ router.post("/signup", async (req, res) => {
     //     pass:"Chandra@2018",
     //   },
     // });
-    var transporter = nodemailer.createTransport( {
+    var transporter = nodemailer.createTransport({
       host: "smtp-mail.outlook.com", // hostname
       secureConnection: false, // TLS requires secureConnection to be false
       port: 587, // port for secure SMTP
       auth: {
-          user: "shriti.chandra@learner.manipal.edu",
-          pass: "Chandra@2018"
+        user: "shriti.chandra@learner.manipal.edu",
+        pass: "Chandra@2018"
       },
       tls: {
-          ciphers:'SSLv3'
+        ciphers: 'SSLv3'
       }
-  });
+    });
+
+    const verifyLink = `http://${req.headers.host}/verify-email?uid=${user._id}`
+    const message = verifyTemplate(username, verifyLink, email);
 
     const options = {
       from: "shriti.chandra@learner.manipal.edu",
       to: email,
       subject: "email verification",
       text: `go to this link: `,
-      html: `<a href='http://${req.headers.host}/verify-email?uid=${user._id}'>click to verify</a>`,
+      // html: `<a href='http://${req.headers.host}/verify-email?uid=${user._id}'>click to verify</a>`,
+      html: message,
     };
 
     transporter.sendMail(options, function (err, info) {
@@ -195,7 +202,7 @@ router.get("/verify-email", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-  res.send("verfy email page");
+  res.send(verifiedPage());
 });
 
 /* *********************************************************** */
@@ -261,24 +268,27 @@ router.post("/forgot", async (req, res) => {
     //     pass: "shahlshreyas@19",
     //   },
     // });
-    var transporter = nodemailer.createTransport( {
+    var transporter = nodemailer.createTransport({
       host: "smtp-mail.outlook.com", // hostname
       secureConnection: false, // TLS requires secureConnection to be false
       port: 587, // port for secure SMTP
       auth: {
-          user: "shriti.chandra@learner.manipal.edu",
-          pass: "Chandra@2018"
+        user: "shriti.chandra@learner.manipal.edu",
+        pass: "Chandra@2018"
       },
       tls: {
-          ciphers:'SSLv3'
+        ciphers: 'SSLv3'
       }
-  });
+    });
+
+    const message = passwordTemplate(user.username, link, email);
     const options = {
       from: "shriti.chandra@learner.manipal.edu",
       to: email,
       subject: "password reset link",
       text: `go to this link: `,
-      html: `<a href=${link}>click to reset password</a>`,
+      // html: `<a href=${link}>click to reset password</a>`,
+      html: message,
     };
 
     transporter.sendMail(options, function (err, info) {
@@ -325,7 +335,7 @@ router.patch("/reset", async (req, res) => {
   }
 });
 
-router.post("/get-user",checkIsVerified, checkJWT, async (req, res) => {
+router.post("/get-user", checkIsVerified, checkJWT, async (req, res) => {
   // var { uid } = req.body;
 
   try {
