@@ -5,14 +5,14 @@ const bcrypt = require("bcrypt");
 var mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 var idy;
-router.get('/', async (req, res) => {
-    try {
-        const users = await User.find()
-        res.json(users)
-    } catch (err) {
-        res.send("Error " + err)
-    }
-})
+// router.get('/', async (req, res) => {
+//     try {
+//         const users = await User.find()
+//         res.json(users)
+//     } catch (err) {
+//         res.send("Error " + err)
+//     }
+// })
 
 router.get('/u', async (req, res) => {
 
