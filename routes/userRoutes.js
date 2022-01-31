@@ -59,6 +59,7 @@ router.get('/:idy', async (req, res) => {
         idy=final;
         console.log(final);
         const user = await User.findById(final);
+        
         res.json(user);
 
     } catch (err) {
