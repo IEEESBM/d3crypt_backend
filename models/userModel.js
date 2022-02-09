@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     lowercase: true,
-//     unique: true,    //inter-college event and hence students participating can have same names, hence commented 
+    //     unique: true,    //inter-college event and hence students participating can have same names, hence commented 
     required: [true, "Please enter a Username"],
   },
 
@@ -75,11 +75,11 @@ const userSchema = new mongoose.Schema({
     type: Number,
   },
 
-  hint1_used:{
+  hint1_used: {
     type: Boolean,
   },
 
-  hint2_used:{
+  hint2_used: {
     type: Boolean,
   },
 
@@ -93,7 +93,7 @@ userSchema.pre("save", async function (next) {
   //Random Set alloc
   console.log("saving a new set to db");
 
-  let totalQuestions = 20;
+  let totalQuestions = 30;
   let set = new Array(totalQuestions).fill(0);
 
   let totalQuestions_user = 15;
@@ -113,7 +113,7 @@ userSchema.pre("save", async function (next) {
 userSchema.statics.login = async function (email, password) {
   const user = await this.findOne({ email: email });
   if (user) {
-    if(user.isVerified==false){
+    if (user.isVerified == false) {
       throw Error('not verified')
     }
     const auth = await bcrypt.compare(password, user.password);
@@ -131,13 +131,13 @@ userSchema.statics.login = async function (email, password) {
 
 async function generate(randomqs, set, totalQuestions) {
   const easyidx = 0;
-  const medidx = 5;
-  const hardidx = 10;
+  const medidx = 10;
+  const hardidx = 20;
 
   //change number of easy/med/hard questions to be solved by the user.
-  const easy_questions = 5;
-  const med_questions = 5;
-  const hard_questions = 5;
+  const easy_questions = 10;
+  const med_questions = 10;
+  const hard_questions = 10;
 
   await generate_easy(easy_questions, 0, easyidx, randomqs, set, totalQuestions);
   await generate_med(med_questions, 0, medidx, randomqs, set, totalQuestions);
@@ -146,7 +146,7 @@ async function generate(randomqs, set, totalQuestions) {
 
 async function generate_easy(easy, curr, idx1, randomqs, set, totalQuestions) {
   if (easy == curr) return;
-  randomIndex1 = Math.floor(Math.random() * (9));
+  randomIndex1 = Math.floor(Math.random() * (14));
 
   try {
     let doc = await Question.findOne({ index: randomIndex1 });
@@ -170,7 +170,7 @@ async function generate_easy(easy, curr, idx1, randomqs, set, totalQuestions) {
 async function generate_med(med, curr, idx2, randomqs, set, totalQuestions) {
   if (med == curr) return;
   // randomIndex = Math.floor(Math.random() * (totalQuestions + 1));
-  randomIndex2 = 9 + Math.floor(Math.random() * (7));
+  randomIndex2 = 14 + Math.floor(Math.random() * (14));
   try {
     let doc = await Question.findOne({ index: randomIndex2 });
 
@@ -192,7 +192,7 @@ async function generate_med(med, curr, idx2, randomqs, set, totalQuestions) {
 
 async function generate_hard(hard, curr, idx3, randomqs, set, totalQuestions) {
   if (hard == curr) return;
-  randomIndex3 = 16 + Math.floor(Math.random() * (5));
+  randomIndex3 = 28 + Math.floor(Math.random() * (11));
   try {
     let doc = await Question.findOne({ index: randomIndex3 });
 
