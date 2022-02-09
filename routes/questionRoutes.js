@@ -46,6 +46,7 @@ router.get("/show_all", async (req, res) => {
 });
 
 router.post("/add", async (req, res) => {
+  try{
   const newq = await Question.create(
     {
       title: req.body.title,
@@ -58,14 +59,19 @@ router.post("/add", async (req, res) => {
       image_4: req.body.image_4,
       hint_1: req.body.hint_1,
       hint_2: req.body.hint_2,
-    },
-    function (err) {
-      console.log(err);
-      // console.log(newq);
     }
+    // ,
+    // function (err) {
+    //   console.log(err);
+    //   res.status(400).json(err);
+    // }
   );
   // console.log(newq);
   res.send(newq);
+  }
+  catch(error){
+    res.status(500).json(error);
+  }
 });
 
 router.get("/:id", async (req, res) => {
