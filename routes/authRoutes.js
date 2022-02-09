@@ -256,7 +256,7 @@ router.post("/forgot", async (req, res) => {
     };
     const token = jwt.sign(payload, secret, { expiresIn: "15m" });
 
-    const link = `https://d3crypt.ieeemanipal.com/reset/${user._id}/${token}`;
+    const link = `https://d3crypt.ieeemanipal.com/reset/${token}`;
 
     console.log(link);
 
@@ -301,15 +301,17 @@ router.post("/forgot", async (req, res) => {
 });
 
 router.patch("/reset", async (req, res) => {
-  const { id, token, newPass } = req.body;
-  const user = await User.findOne({ id }).lean();
-  if (!user) {
-    return res.json({
-      status: "error",
-      error: "User does not exist!",
-      data: "",
-    });
-  } else if (!token) {
+  const {token, newPass } = req.body;
+  console.log(req.body);
+  // const user = await User.findOne({ id }).lean();
+  // if (!user) {
+  //   return res.json({
+  //     status: "error",
+  //     error: "User does not exist!",
+  //     data: "",
+  //   });
+  // } else 
+  if (!token) {
     return res.json({
       status: "error",
       error: "No valid token!",
@@ -318,6 +320,10 @@ router.patch("/reset", async (req, res) => {
   } else {
     try {
       console.log(newPass);
+      var base64Payload = token.split('.')[1];
+    var payload = Buffer.from(base64Payload, 'base64');
+    var id = JSON.parse(payload.toString()).id;
+    console.log(id);
       const hash_password = await bcrypt.hash(newPass, 10);
       const updatedUser = await User.updateOne(
         { _id: id },
