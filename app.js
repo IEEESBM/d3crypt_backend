@@ -54,7 +54,7 @@ app.use(cookieParser());
 
 // //testing db
 
-mongoose.connect("mongodb+srv://admin:admin123@cluster0.ltics.mongodb.net/?retryWrites=true&w=majority", {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
