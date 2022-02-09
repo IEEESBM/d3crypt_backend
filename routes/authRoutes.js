@@ -150,7 +150,8 @@ router.post("/signup", async (req, res) => {
       }
     });
 
-    const verifyLink = `http://${req.headers.host}/verify-email?uid=${user._id}`
+    // const verifyLink = `http://${req.headers.host}/verify-email?uid=${user._id}`
+    const verifyLink = `https://d3crypt.ieeemanipal.com/verification/${token}`
     const message = verifyTemplate(username, verifyLink, email);
 
     const options = {
@@ -185,7 +186,11 @@ router.post("/signup", async (req, res) => {
 
 router.get("/verify-email", async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.query.uid });
+    let token = req.headers['x-access-token'];
+    var base64Payload = token.split('.')[1];
+    var payload = Buffer.from(base64Payload, 'base64');
+    var userID = JSON.parse(payload.toString()).id; 
+    const user = await User.findOne({ _id: userID });
     if (!user) {
       console.log("could not find user");
     } else {
@@ -196,7 +201,7 @@ router.get("/verify-email", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-  res.send(verifiedPage());
+  // res.send(verifiedPage());
 });
 
 /* *********************************************************** */
