@@ -251,7 +251,7 @@ router.post("/forgot", async (req, res) => {
     };
     const token = jwt.sign(payload, secret, { expiresIn: "15m" });
 
-    const link = `https://decrypt-ieeesbm.herokuapp.com/reset/${user._id}/${token}`;
+    const link = `https://d3crypt.ieeemanipal.com/reset/${user._id}/${token}`;
 
     console.log(link);
 
