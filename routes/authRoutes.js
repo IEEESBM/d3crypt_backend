@@ -136,20 +136,14 @@ router.post("/signup", async (req, res) => {
     const token = createToken(user._id);
     sessionstorage.setItem("jwt", token);
 
-    // var transporter = nodemailer.createTransport("SMTP",{
-    //   service: "hotmail",
-    //   auth: {
-    //     user:"shriti.chandra@learner.manipal.edu",
-    //     pass:"Chandra@2018",
-    //   },
-    // });
+    
     var transporter = nodemailer.createTransport({
       host: "smtp-mail.outlook.com", // hostname
       secureConnection: false, // TLS requires secureConnection to be false
       port: 587, // port for secure SMTP
       auth: {
-        user: "shriti.chandra@learner.manipal.edu",
-        pass: "Chandra@2018"
+        user: process.env.MAIL_ID,
+        pass: process.env.MAIL_PASS
       },
       tls: {
         ciphers: 'SSLv3'
@@ -160,9 +154,9 @@ router.post("/signup", async (req, res) => {
     const message = verifyTemplate(username, verifyLink, email);
 
     const options = {
-      from: "shriti.chandra@learner.manipal.edu",
+      from: process.env.MAIL_ID,
       to: email,
-      subject: "email verification",
+      subject: "Email Verification",
       text: `go to this link: `,
       // html: `<a href='http://${req.headers.host}/verify-email?uid=${user._id}'>click to verify</a>`,
       html: message,
@@ -273,8 +267,8 @@ router.post("/forgot", async (req, res) => {
       secureConnection: false, // TLS requires secureConnection to be false
       port: 587, // port for secure SMTP
       auth: {
-        user: "shriti.chandra@learner.manipal.edu",
-        pass: "Chandra@2018"
+        user: process.env.MAIL_ID,
+        pass: process.env.MAIL_PASS
       },
       tls: {
         ciphers: 'SSLv3'
@@ -283,7 +277,7 @@ router.post("/forgot", async (req, res) => {
 
     const message = passwordTemplate(user.username, link, email);
     const options = {
-      from: "shriti.chandra@learner.manipal.edu",
+      from: process.env.MAIL_ID,
       to: email,
       subject: "password reset link",
       text: `go to this link: `,
