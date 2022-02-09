@@ -7,7 +7,7 @@ const Question = require('../models/questionModel');
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    lowercase: true,
+    // lowercase: true,
     //     unique: true,    //inter-college event and hence students participating can have same names, hence commented 
     required: [true, "Please enter a Username"],
   },
