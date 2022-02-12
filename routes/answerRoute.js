@@ -32,7 +32,7 @@ router.post('/submit', async (req, res) => {
   console.log(currScore, allResponses, noofattempts, qIndex)
 
   //edge-case
-  if (currQues == 15) {
+  if (currQues == 30) {
     res.send("CONGRATULATIONS! YOU'RE DONE!!!");
     //show leaderboard
   } else {
