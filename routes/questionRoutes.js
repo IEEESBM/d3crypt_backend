@@ -11,17 +11,21 @@ router.get("/check", (req, res) => {
   res.send("OK");
 });
 
-router.get("/",checkJWT, checkIsVerified, async (req, res) => {
+router.get("/", checkJWT, checkIsVerified, async (req, res) => {
   try {
-	
+
     // let token = req.headers["x-access-token"];
-		// console.log(req)
+    // console.log(req)
     // var base64Payload = token.split(".")[1];
     // var payload = Buffer.from(base64Payload, "base64");
     var userID = req.userId;
     console.log(userID);
     var u = await User.findOne({ _id: userID });
     let current = u.currentQuestion;
+
+    if (current == 30) {
+      res.send("Congratulations!, you're done with all the questions");
+    }
 
     console.log(u.currentQuestion);
     let cq = await Question.findOne({ index: u.questions[current] });
@@ -46,30 +50,30 @@ router.get("/show_all", async (req, res) => {
 });
 
 router.post("/add", async (req, res) => {
-  try{
-  const newq = await Question.create(
-    {
-      title: req.body.title,
-      difficulty: req.body.difficulty,
-      answer: req.body.answer,
-      index: req.body.index,
-      image_1: req.body.image_1,
-      image_2: req.body.image_2,
-      image_3: req.body.image_3,
-      image_4: req.body.image_4,
-      hint_1: req.body.hint_1,
-      hint_2: req.body.hint_2,
-    }
-    // ,
-    // function (err) {
-    //   console.log(err);
-    //   res.status(400).json(err);
-    // }
-  );
-  // console.log(newq);
-  res.send(newq);
+  try {
+    const newq = await Question.create(
+      {
+        title: req.body.title,
+        difficulty: req.body.difficulty,
+        answer: req.body.answer,
+        index: req.body.index,
+        image_1: req.body.image_1,
+        image_2: req.body.image_2,
+        image_3: req.body.image_3,
+        image_4: req.body.image_4,
+        hint_1: req.body.hint_1,
+        hint_2: req.body.hint_2,
+      }
+      // ,
+      // function (err) {
+      //   console.log(err);
+      //   res.status(400).json(err);
+      // }
+    );
+    // console.log(newq);
+    res.send(newq);
   }
-  catch(error){
+  catch (error) {
     res.status(500).json(error);
   }
 });
