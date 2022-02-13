@@ -20,7 +20,7 @@ router.get("/", checkJWT, checkIsVerified, async (req, res) => {
     // var payload = Buffer.from(base64Payload, "base64");
     var userID = req.userId;
     console.log(userID);
-    var u = await User.findOne({ _id: userID });
+    var u = await User.findOne({ _id: userID }).select("-_id -password -noofattempts");
     let current = u.currentQuestion;
 
     if (current >= 30) {
