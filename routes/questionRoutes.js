@@ -23,8 +23,8 @@ router.get("/", checkJWT, checkIsVerified, async (req, res) => {
     var u = await User.findOne({ _id: userID });
     let current = u.currentQuestion;
 
-    if (current == 30) {
-      res.send("Congratulations!, you're done with all the questions");
+    if (current >= 30) {
+       return res.send("Congratulations!, you're done with all the questions");
     }
 
     console.log(u.currentQuestion);
