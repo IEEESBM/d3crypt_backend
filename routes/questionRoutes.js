@@ -28,8 +28,9 @@ router.get("/", checkJWT, checkIsVerified, async (req, res) => {
     }
 
     console.log(u.currentQuestion);
-    let cq = await Question.findOne({ index: u.questions[current] });
+    let cq = await Question.findOne({ index: u.questions[current] }).select("-answer -hint_1 -hint_2");
     // console.log(cq);
+    console.log(cq.index);
     res.json({ question: cq, user: u });
   } catch (err) {
     console.log(err);
